@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ecom Wayfinder — Seller Profile Assessment</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:#f5f2eb; --ink:#1a1a1a; --muted:#7a7065; --border:#d8d0c4; --card:#fff;
+  --gold:#c4922a; --gold-l:#f5ecd8; --gold-d:#a07020;
+  --teal:#2a7a7a; --teal-l:#d0ecec;
+  --red:#c43a2a; --red-l:#f5ddd8;
+  --violet:#5a3a8a; --violet-l:#e8d8f5;
+  --amber:#b8620a; --amber-l:#fdecd0;
+  --dark:#111; --dark2:#1a1a1a; --dark3:#222;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:'Syne',sans-serif;min-height:100vh;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
+
+/* ══ WELCOME ══ */
+#welcomeScreen{
+  background:linear-gradient(160deg,#111 0%,#1e1a10 60%,#1a1510 100%);
+  align-items:center;justify-content:center;padding:48px 24px;position:relative;overflow:hidden;
+}
+#welcomeScreen::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 70% 20%, rgba(196,146,42,0.06) 0%, transparent 60%),
+             radial-gradient(ellipse at 20% 80%, rgba(196,146,42,0.04) 0%, transparent 50%);
+  pointer-events:none;
+}
+.w-inner{max-width:480px;width:100%;position:relative;z-index:1;}
+
+.w-brand{display:flex;align-items:center;gap:10px;margin-bottom:40px;}
+.w-logo{width:36px;height:36px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:#000;font-weight:500;}
+.w-brand-name{font-family:'Playfair Display',serif;font-size:15px;color:#888;letter-spacing:0.02em;}
+
+.w-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.18em;color:var(--gold);margin-bottom:16px;opacity:0.8;}
+.w-title{font-family:'Playfair Display',serif;font-size:32px;color:#fff;line-height:1.2;margin-bottom:16px;font-weight:600;}
+.w-sub{font-size:14px;color:#888;line-height:1.75;margin-bottom:14px;}
+.w-confidence{font-size:12px;color:#555;line-height:1.65;margin-bottom:32px;padding:12px 16px;border-left:2px solid #2a2a2a;font-style:italic;}
+
+.w-divider{width:32px;height:1px;background:var(--gold);opacity:0.3;margin-bottom:28px;}
+
+.w-field-label{font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:#555;margin-bottom:8px;font-family:'JetBrains Mono',monospace;}
+.w-input{
+  width:100%;padding:14px 16px;border-radius:6px;border:1.5px solid #2a2a2a;
+  background:#161616;color:#fff;font-family:'Syne',sans-serif;font-size:15px;
+  outline:none;transition:border-color 0.2s;margin-bottom:20px;
+}
+.w-input::placeholder{color:#333;}
+.w-input:focus{border-color:var(--gold);}
+
+.w-consent{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px;cursor:pointer;}
+.w-consent input[type=checkbox]{
+  width:16px;height:16px;border:1.5px solid #333;border-radius:3px;
+  background:#161616;cursor:pointer;flex-shrink:0;margin-top:2px;
+  accent-color:var(--gold);
+}
+.w-consent-txt{font-size:12px;color:#555;line-height:1.6;}
+.w-consent-txt a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(196,146,42,0.3);}
+.w-consent-txt a:hover{border-bottom-color:var(--gold);}
+
+.w-btn{
+  width:100%;padding:15px;border-radius:6px;border:none;
+  background:var(--gold);color:#000;font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;
+  letter-spacing:0.02em;
+}
+.w-btn:hover:not(:disabled){background:#d4a030;transform:translateY(-1px);}
+.w-btn:disabled{opacity:0.3;cursor:not-allowed;transform:none;}
+
+.w-microcopy{font-size:11px;color:#3a3a3a;margin-top:14px;line-height:1.7;text-align:center;}
+.w-microcopy span{display:block;}
+.w-microcopy .w-legal-note{color:#2e2e2e;font-style:italic;margin-top:4px;}
+
+.w-footer{
+  position:relative;z-index:1;margin-top:48px;
+  display:flex;gap:20px;flex-wrap:wrap;justify-content:center;
+}
+.w-footer a{font-size:10px;color:#2e2e2e;text-decoration:none;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;}
+.w-footer a:hover{color:#555;}
+
+/* ══ ASSESSMENT ══ */
+#assessScreen{background:var(--bg);}
+.a-hdr{background:var(--ink);padding:16px 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.a-logo{display:flex;align-items:center;gap:10px;}
+.a-logo-box{width:30px;height:30px;background:var(--gold);border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;}
+.a-logo-name{font-family:'Playfair Display',serif;font-size:15px;color:#fff;}
+.a-sub{font-size:10px;color:#444;margin-top:1px;font-family:'JetBrains Mono',monospace;}
+.a-prog{display:flex;align-items:center;gap:10px;}
+.a-prog-txt{font-family:'JetBrains Mono',monospace;font-size:11px;color:#444;}
+.a-prog-bg{width:100px;height:2px;background:#2a2a2a;border-radius:2px;}
+.a-prog-fill{height:2px;background:var(--gold);border-radius:2px;transition:width 0.4s ease;width:0%;}
+.a-body{max-width:640px;margin:0 auto;padding:44px 24px 120px;}
+.dim-block{margin-bottom:48px;}
+.dim-block+.dim-block{padding-top:40px;border-top:1px solid var(--border);}
+.dim-hdr{display:flex;align-items:flex-start;gap:12px;margin-bottom:24px;}
+.dim-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:2px;text-transform:uppercase;letter-spacing:0.1em;flex-shrink:0;margin-top:3px;}
+.tc{background:var(--gold-l);color:var(--gold);}
+.tr{background:var(--teal-l);color:var(--teal);}
+.te{background:var(--red-l);color:var(--red);}
+.tm{background:var(--violet-l);color:var(--violet);}
+.dim-name{font-family:'Playfair Display',serif;font-size:18px;}
+.dim-desc{font-size:12px;color:var(--muted);margin-top:2px;}
+.q-block{margin-bottom:20px;animation:up 0.3s ease both;}
+@keyframes up{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.q-lbl{font-size:13px;font-weight:600;margin-bottom:8px;display:flex;gap:9px;line-height:1.5;}
+.q-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);flex-shrink:0;padding-top:2px;}
+.opts{display:flex;flex-direction:column;gap:4px;}
+.opt{display:flex;align-items:center;gap:10px;padding:9px 12px;border:1.5px solid var(--border);border-radius:5px;background:var(--card);cursor:pointer;font-family:'Syne',sans-serif;width:100%;text-align:left;transition:all 0.12s;}
+.opt:hover{border-color:var(--gold);background:var(--gold-l);}
+.opt.sel{border-color:var(--gold);background:var(--gold-l);}
+.dot{width:11px;height:11px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all 0.12s;}
+.opt.sel .dot{background:var(--gold);border-color:var(--gold);}
+.opt-txt{font-size:13px;color:var(--ink);line-height:1.4;}
+.c-bar{position:fixed;bottom:0;left:0;right:0;background:var(--ink);padding:14px 40px;display:flex;align-items:center;justify-content:space-between;gap:16px;z-index:100;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+.c-bar.show{transform:translateY(0);}
+.c-msg{font-size:13px;color:#666;}
+.c-msg strong{color:#fff;}
+.c-btn{padding:12px 24px;border-radius:5px;border:none;background:var(--gold);color:#000;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.c-btn:hover{background:#d4a030;}
+.c-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+/* ══ RESULTS ══ */
+#resultsScreen{background:var(--dark);padding:64px 24px 80px;}
+.r-inner{max-width:600px;margin:0 auto;}
+
+.r-brand{display:flex;align-items:center;gap:10px;margin-bottom:48px;justify-content:center;}
+.r-logo{width:32px;height:32px;background:var(--gold);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;}
+.r-brand-name{font-family:'Playfair Display',serif;font-size:14px;color:#444;}
+
+/* Result header */
+.r-hdr{text-align:center;margin-bottom:40px;}
+.r-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:0.18em;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:12px;opacity:0.8;}
+.r-title{font-family:'Playfair Display',serif;font-size:26px;color:#fff;line-height:1.25;margin-bottom:14px;}
+.r-intro{font-size:13px;color:#666;line-height:1.75;margin-bottom:8px;}
+.r-intro-2{font-size:12px;color:#444;line-height:1.7;font-style:italic;}
+
+/* Section wrapper */
+.r-section{background:#141414;border:1px solid #1e1e1e;border-radius:10px;padding:24px;margin-bottom:16px;}
+.r-section-eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:0.16em;color:#333;font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.r-section-title{font-family:'Playfair Display',serif;font-size:17px;color:#fff;margin-bottom:8px;}
+.r-section-body{font-size:13px;color:#555;line-height:1.7;}
+
+/* Radar */
+.r-radar{text-align:center;}
+.r-radar-sub{font-size:11px;color:#333;font-family:'JetBrains Mono',monospace;margin-top:12px;}
+.r-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:12px;}
+.r-leg{display:flex;align-items:center;gap:5px;font-size:10px;color:#333;}
+.r-leg-dot{width:6px;height:6px;border-radius:50%;}
+
+/* Direction */
+.dir-lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.14em;color:#333;font-family:'JetBrains Mono',monospace;margin-bottom:4px;}
+.dir-plat{font-family:'Playfair Display',serif;font-size:22px;margin:4px 0;}
+.dir-why{font-size:12px;color:#555;line-height:1.6;}
+.dir-when{font-size:11px;color:#2a2a2a;margin-top:6px;font-family:'JetBrains Mono',monospace;}
+.dir-step{padding:16px 0;border-bottom:1px solid #1e1e1e;display:flex;gap:14px;align-items:flex-start;}
+.dir-step:last-child{border-bottom:none;padding-bottom:0;}
+.dir-badge{width:24px;height:24px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-top:2px;}
+.db1{background:var(--gold);color:#000;}
+.db2{background:#1e1e1e;color:#444;border:1px solid #252525;}
+.dir-caveat{font-size:11px;color:#2e2e2e;line-height:1.65;margin-top:14px;padding-top:14px;border-top:1px solid #1a1a1a;font-style:italic;}
+
+/* Wait card */
+.wait-section{background:#1a1510;border:1px solid #3a2808;border-radius:10px;padding:24px;margin-bottom:16px;}
+.wait-lbl{font-size:9px;text-transform:uppercase;letter-spacing:0.14em;color:var(--amber);font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.wait-title{font-family:'Playfair Display',serif;font-size:18px;color:#d4a060;margin-bottom:10px;}
+.wait-body{font-size:13px;color:#666;line-height:1.7;}
+
+/* Why interpretation matters */
+.interp-section{background:#0e0e0e;border:1px solid #181818;border-radius:10px;padding:24px;margin-bottom:16px;}
+
+/* CTA */
+.cta-section{
+  background:linear-gradient(135deg,#1a160a,#141414);
+  border:1.5px solid var(--gold);border-radius:10px;
+  padding:32px 28px;margin-bottom:16px;
+}
+.cta-eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:0.18em;color:var(--gold);font-family:'JetBrains Mono',monospace;margin-bottom:14px;opacity:0.8;}
+.cta-title{font-family:'Playfair Display',serif;font-size:22px;color:#fff;line-height:1.25;margin-bottom:16px;}
+.cta-list{list-style:none;margin-bottom:20px;}
+.cta-list li{font-size:13px;color:#666;line-height:1.6;padding:4px 0;display:flex;gap:10px;}
+.cta-list li::before{content:'—';color:var(--gold);opacity:0.5;flex-shrink:0;}
+.cta-price{font-family:'JetBrains Mono',monospace;font-size:12px;color:#444;margin-bottom:20px;padding:10px 0;border-top:1px solid #1e1e1e;border-bottom:1px solid #1e1e1e;}
+.cta-price strong{color:#888;}
+
+.cta-consent{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px;}
+.cta-consent input[type=checkbox]{width:14px;height:14px;border:1px solid #2a2a2a;background:#111;cursor:pointer;flex-shrink:0;margin-top:2px;accent-color:var(--gold);}
+.cta-consent-txt{font-size:11px;color:#444;line-height:1.6;}
+
+.cta-btn{
+  display:block;width:100%;padding:14px;border-radius:6px;border:none;
+  background:var(--gold);color:#000;font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;
+  text-align:center;text-decoration:none;letter-spacing:0.02em;
+}
+.cta-btn:hover:not(:disabled){background:#d4a030;transform:translateY(-1px);}
+.cta-btn:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+.cta-agreement{font-size:10px;color:#2e2e2e;text-align:center;margin-top:10px;line-height:1.6;}
+.cta-agreement a{color:#444;text-decoration:none;border-bottom:1px solid #2a2a2a;}
+
+/* Next step */
+.next-section{background:#0d0d0d;border:1px solid #161616;border-radius:10px;padding:22px;margin-bottom:16px;}
+
+/* Advisory notice */
+.advisory-section{padding:20px;margin-bottom:16px;}
+.advisory-title{font-size:9px;text-transform:uppercase;letter-spacing:0.14em;color:#222;font-family:'JetBrains Mono',monospace;margin-bottom:8px;}
+.advisory-body{font-size:11px;color:#252525;line-height:1.7;}
+
+/* Footer */
+.r-footer{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:32px;padding-top:24px;border-top:1px solid #161616;}
+.r-footer a{font-size:10px;color:#222;text-decoration:none;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;}
+.r-footer a:hover{color:#444;}
+
+/* Overlay */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.92);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:1000;}
+.overlay.show{display:flex;}
+.spinner{width:28px;height:28px;border:2px solid #1e1e1e;border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.overlay-txt{font-family:'JetBrains Mono',monospace;font-size:11px;color:#333;}
+
+@media(max-width:600px){
+  .a-hdr{padding:14px 20px;}
+  .c-bar{padding:14px 20px;flex-direction:column;}
+  .c-btn{width:100%;}
+  .w-title{font-size:26px;}
+  .r-title{font-size:22px;}
+  .cta-section{padding:24px 20px;}
+}
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay">
+  <div class="spinner"></div>
+  <div class="overlay-txt">Processing your profile...</div>
+</div>
+
+<!-- ══ SCREEN 1: WELCOME ══ -->
+<div class="screen active" id="welcomeScreen">
+  <div class="w-inner">
+    <div class="w-brand">
+      <div class="w-logo">EW</div>
+      <div class="w-brand-name">Ecom Wayfinder</div>
+    </div>
+
+    <div class="w-eyebrow">Seller Profile Diagnostic</div>
+    <div class="w-title">Understand Your E-commerce Seller Profile</div>
+    <div class="w-sub">A structured diagnostic that evaluates your readiness across four strategic dimensions and helps identify your directional entry path into e-commerce.</div>
+    <div class="w-confidence">There are no right or wrong answers — the goal is to understand how your structure fits different e-commerce models.</div>
+
+    <div class="w-divider"></div>
+
+    <div class="w-field-label">Your Email Address</div>
+    <input class="w-input" id="emailInput" type="email" placeholder="Enter your email address"
+      oninput="validateForm()"
+      onkeydown="if(event.key==='Enter')startAssessment()"/>
+
+    <label class="w-consent" id="consentLabel">
+      <input type="checkbox" id="consentCheck" onchange="validateForm()"/>
+      <span class="w-consent-txt">
+        I agree to the <a href="/legal/terms.html" target="_blank">Terms of Use</a> and
+        <a href="/legal/privacy.html" target="_blank">Privacy Policy</a> and understand
+        that this tool provides directional advisory insight only.
+      </span>
+    </label>
+
+    <button class="w-btn" id="startBtn" onclick="startAssessment()" disabled>
+      Start Assessment →
+    </button>
+
+    <div class="w-microcopy">
+      <span>19 questions · approximately 5 minutes</span>
+      <span class="w-legal-note">Your results are directional and may require interpretation in a live advisory session.</span>
+    </div>
+
+    <div class="w-footer">
+      <a href="/legal/terms.html">Terms of Use</a>
+      <a href="/legal/privacy.html">Privacy Policy</a>
+      <a href="/legal/disclaimer.html">Disclaimer</a>
+      <a href="/legal/client-agreement.html">Client Advisory Agreement</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2: ASSESSMENT ══ -->
+<div class="screen" id="assessScreen">
+  <div class="a-hdr">
+    <div class="a-logo">
+      <div class="a-logo-box">EW</div>
+      <div>
+        <div class="a-logo-name">Ecom Wayfinder</div>
+        <div class="a-sub" id="aSubtitle">Seller Profile Diagnostic</div>
+      </div>
+    </div>
+    <div class="a-prog">
+      <div class="a-prog-txt" id="progTxt">0 / 19</div>
+      <div class="a-prog-bg"><div class="a-prog-fill" id="progFill"></div></div>
+    </div>
+  </div>
+  <div class="a-body" id="aBody"></div>
+  <div class="c-bar" id="cBar">
+    <div class="c-msg"><strong>All responses recorded.</strong> Ready to generate your profile.</div>
+    <button class="c-btn" id="cBtn" onclick="submitAssessment()">Generate My Profile →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 3: RESULTS ══ -->
+<div class="screen" id="resultsScreen">
+  <div class="r-inner">
+
+    <div class="r-brand">
+      <div class="r-logo">EW</div>
+      <div class="r-brand-name">Ecom Wayfinder</div>
+    </div>
+
+    <!-- Header -->
+    <div class="r-hdr">
+      <div class="r-eyebrow">Diagnostic Complete</div>
+      <div class="r-title">Your E-commerce Seller Profile Is Ready</div>
+      <div class="r-intro">This profile provides a directional view of how your strengths, resources, and constraints align with different e-commerce models.</div>
+      <div class="r-intro-2">The result is intended as a strategic starting point rather than a definitive prescription.</div>
+    </div>
+
+    <!-- Radar -->
+    <div class="r-section r-radar">
+      <div class="r-section-eyebrow">Structural Profile Visualization</div>
+      <div class="r-section-title">Your Structural Seller Profile</div>
+      <canvas id="radarCanvas" width="360" height="280"></canvas>
+      <div class="r-radar-sub">This visualization reflects the structural tendencies of your seller profile based on your responses.</div>
+      <div class="r-legend">
+        <div class="r-leg"><div class="r-leg-dot" style="background:#c4922a"></div>Capital</div>
+        <div class="r-leg"><div class="r-leg-dot" style="background:#4ecdc4"></div>Risk Appetite</div>
+        <div class="r-leg"><div class="r-leg-dot" style="background:#e8635a"></div>Execution</div>
+        <div class="r-leg"><div class="r-leg-dot" style="background:#9b8ec4"></div>Market Creation</div>
+      </div>
+    </div>
+
+    <!-- Direction -->
+    <div id="directionSlot"></div>
+
+    <!-- Why interpretation matters -->
+    <div class="interp-section">
+      <div class="r-section-eyebrow">Strategic Context</div>
+      <div class="r-section-title" style="color:#fff;font-family:'Playfair Display',serif;font-size:17px;margin-bottom:10px;">Why interpretation matters</div>
+      <div class="r-section-body">
+        Most sellers do not fail because of effort. They fail because they enter the wrong type of e-commerce game.<br><br>
+        This profile is the first layer of insight.<br><br>
+        A live interpretation session helps translate it into a realistic entry path.
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-section">
+      <div class="cta-eyebrow">Strategic Advisory Session</div>
+      <div class="cta-title">Book Your Profile Review</div>
+      <ul class="cta-list">
+        <li>Interpret your seller profile</li>
+        <li>Clarify your realistic entry zone</li>
+        <li>Discuss viable e-commerce paths</li>
+      </ul>
+      <div class="cta-price"><strong>60-minute advisory session · $89</strong></div>
+
+      <label class="cta-consent" id="bookingConsentLabel">
+        <input type="checkbox" id="bookingConsent" onchange="validateBooking()"/>
+        <span class="cta-consent-txt">
+          I understand that this profile is directional and that final business decisions remain my responsibility.
+        </span>
+      </label>
+
+      <a id="ctaBtn" href="#" class="cta-btn" style="pointer-events:none;opacity:0.35;" onclick="return false;">
+        Book Your Profile Review →
+      </a>
+      <div class="cta-agreement">
+        By booking this session you acknowledge the
+        <a href="/legal/client-agreement.html" target="_blank">Client Advisory Agreement</a>.
+      </div>
+    </div>
+
+    <!-- Next step -->
+    <div class="next-section">
+      <div class="r-section-eyebrow">What Comes Next</div>
+      <div class="r-section-title" style="color:#fff;font-family:'Playfair Display',serif;font-size:16px;margin-bottom:10px;">What comes after the seller profile?</div>
+      <div class="r-section-body" style="font-size:12px;color:#3a3a3a;line-height:1.75;">
+        Understanding your seller profile is the first step.<br><br>
+        The next strategic question is no longer <em style="color:#444;">"Can I enter e-commerce?"</em> but rather:<br><br>
+        <em style="color:#555;">"Which product direction actually fits my structure?"</em><br><br>
+        That is addressed in the next advisory layer: <strong style="color:#555;">Product Assessment</strong>.
+      </div>
+    </div>
+
+    <!-- Advisory notice -->
+    <div class="advisory-section">
+      <div class="advisory-title">Advisory Notice</div>
+      <div class="advisory-body">
+        This calculator provides directional advisory insight based on user inputs.
+        It is intended for educational and strategic planning purposes only and does not constitute
+        legal, financial, tax, or investment advice. All business decisions remain the sole
+        responsibility of the user.
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="r-footer">
+      <a href="/legal/terms.html">Terms of Use</a>
+      <a href="/legal/privacy.html">Privacy Policy</a>
+      <a href="/legal/disclaimer.html">Disclaimer</a>
+      <a href="/legal/client-agreement.html">Client Advisory Agreement</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxKXvGVr1Cap6iO8eKZ5AdT07drMiju5TQBYZ6g1aBC9VCJCzLguKZdRNch8xJQXuEHWA/exec';
+const BOOKING_URL = 'YOUR_BOOKING_LINK_HERE';
+
+let clientEmail = '';
+const ans = {};
+
+// ─── FORM VALIDATION ─────────────────────────────────────────────────
+function validateForm() {
+  const email = document.getElementById('emailInput').value.trim();
+  const consent = document.getElementById('consentCheck').checked;
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  document.getElementById('startBtn').disabled = !(validEmail && consent);
+}
+
+function validateBooking() {
+  const consent = document.getElementById('bookingConsent').checked;
+  const btn = document.getElementById('ctaBtn');
+  if (consent) {
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = '1';
+    btn.onclick = null;
+  } else {
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.35';
+    btn.onclick = function(){ return false; };
+  }
+}
+
+// ─── START ────────────────────────────────────────────────────────────
+function startAssessment() {
+  const email = document.getElementById('emailInput').value.trim();
+  const consent = document.getElementById('consentCheck').checked;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !consent) return;
+  clientEmail = email;
+  document.getElementById('aSubtitle').textContent = clientEmail;
+  buildQuestions();
+  show('assessScreen');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+// ─── QUESTIONS ────────────────────────────────────────────────────────
+const QS = [
+  {id:'Q1', dim:'c', text:'Total launch capital available for first 90 days (all-in)?', opts:['<$500','$500–1,500','$1,500–5,000','$5,000–15,000','$15,000+']},
+  {id:'Q2', dim:'c', text:'How much capital can you afford to lose without financial stress?', opts:['<10%','10–25%','25–50%','50–75%','>75%']},
+  {id:'Q3', dim:'c', text:'When does the venture need to start partially paying back?', opts:['30 days','60 days','90 days','6 months','12+ months']},
+  {id:'Q4', dim:'c', text:'External financial buffer (outside the venture)?', opts:['None','<3 months living expenses','3–6 months','6–12 months','12+ months']},
+  {id:'Q5', dim:'c', text:'Monthly paid traffic budget you are comfortable deploying?', opts:['Near zero','Up to $200','$200–600','$600–1,500','$1,500+']},
+  {id:'Q6', dim:'c', text:'Monthly tools/software budget during launch phase?', opts:['$0','Up to $50','$50–150','$150–300','$300+']},
+  {id:'Q7', dim:'c', text:'Comfortable first SKU investment (incl. logistics & fees)?', opts:['<$300','$300–700','$700–1,500','$1,500–3,000','$3,000+']},
+  {id:'Q8', dim:'r', text:'Reaction to 2–3 months of unstable sales?', opts:['Panic / high stress','Uncomfortable but manageable','Acceptable / expected','Strategically interesting']},
+  {id:'Q9', dim:'r', text:'Willingness to test unproven products?', opts:['Only validated demand','Selective experimentation','Comfortable testing','Actively seek asymmetric bets']},
+  {id:'Q10',dim:'r', text:'Enter competitive market if margins are strong?', opts:['No','Only with strong differentiation','Yes, if numbers work','Competition validates demand']},
+  {id:'Q11',dim:'r', text:'Response to sudden platform rule change?', opts:['Freeze / delay','Slow adjustment','Recalculate and adapt','Pivot quickly and restructure']},
+  {id:'Q12',dim:'e', text:'Enjoy operational processes (inventory, listings, optimization)?', opts:['No','Neutral','Yes','Deeply enjoy system building']},
+  {id:'Q13',dim:'e', text:'Current workflow structure?', opts:['Mostly reactive','Mixed / partially structured','Structured','Systemized & documented']},
+  {id:'Q14',dim:'e', text:'Consistent time available (10+ hrs/week)?', opts:['Irregular','Likely','Yes','Yes, and scalable']},
+  {id:'Q15',dim:'e', text:'Do you regularly track numbers and metrics?', opts:['Rarely','Sometimes','Yes','Systematically / dashboard-driven']},
+  {id:'Q16',dim:'m', text:'Comfort building brand story?', opts:['Not comfortable','Somewhat comfortable','Yes','Strong narrative thinker']},
+  {id:'Q17',dim:'m', text:'Content creation consistency?', opts:['None','Occasional','Regular','Systematic & strategic']},
+  {id:'Q18',dim:'m', text:'Ability to articulate differentiation?', opts:['Hard to define','Somewhat clear','Clear and structured','Very sharp positioning']},
+  {id:'Q19',dim:'m', text:'Preferred competitive edge?', opts:['Price-led','Hybrid (price + value)','Differentiation-led','Strong brand & positioning']},
+];
+
+const DIM_META = {
+  c:{tag:'Financial Fit',  cls:'tc',name:'Capital Readiness', desc:'Your financial runway and risk budget'},
+  r:{tag:'Risk Profile',   cls:'tr',name:'Risk Appetite',      desc:'Your tolerance for uncertainty'},
+  e:{tag:'Operational Fit',cls:'te',name:'Execution Readiness',desc:'Your process discipline and capacity'},
+  m:{tag:'Customer Fit',   cls:'tm',name:'Market Creation',    desc:'Your brand and differentiation capability'},
+};
+
+function buildQuestions() {
+  const body = document.getElementById('aBody');
+  body.innerHTML = '';
+  ['c','r','e','m'].forEach(dim => {
+    const meta = DIM_META[dim];
+    const block = document.createElement('div');
+    block.className = 'dim-block';
+    block.innerHTML = `<div class="dim-hdr"><span class="dim-tag ${meta.cls}">${meta.tag}</span><div><div class="dim-name">${meta.name}</div><div class="dim-desc">${meta.desc}</div></div></div>`;
+    QS.filter(q => q.dim === dim).forEach((q,qi) => {
+      const qb = document.createElement('div');
+      qb.className = 'q-block';
+      qb.style.animationDelay = `${qi*0.04}s`;
+      qb.innerHTML = `<div class="q-lbl"><span class="q-num">${q.id}</span><span>${q.text}</span></div><div class="opts">${q.opts.map((o,i)=>`<button class="opt" onclick="pick('${q.id}',${i})" data-q="${q.id}" data-i="${i}"><div class="dot"></div><span class="opt-txt">${o}</span></button>`).join('')}</div>`;
+      block.appendChild(qb);
+    });
+    body.appendChild(block);
+  });
+}
+
+function pick(qid, idx) {
+  ans[qid] = idx;
+  document.querySelectorAll(`[data-q="${qid}"]`).forEach((b,i) => b.classList.toggle('sel', i===idx));
+  const n = Object.keys(ans).length;
+  document.getElementById('progTxt').textContent = `${n} / 19`;
+  document.getElementById('progFill').style.width = `${n/19*100}%`;
+  if (n === 19) document.getElementById('cBar').classList.add('show');
+}
+
+// ─── SCORING ──────────────────────────────────────────────────────────
+function score() {
+  const dims = {c:[],r:[],e:[],m:[]};
+  QS.forEach(q => { if (ans[q.id] !== undefined) dims[q.dim].push(ans[q.id]/(q.opts.length-1)*10); });
+  const out = {};
+  Object.entries(dims).forEach(([d,vs]) => out[d] = vs.length ? parseFloat((vs.reduce((a,b)=>a+b)/vs.length).toFixed(1)) : null);
+  return out;
+}
+
+function capTier(c) {
+  if (c===null) return null;
+  if (c<2.5) return 'very_low';
+  if (c<4.5) return 'low';
+  if (c<6.5) return 'medium';
+  return 'high';
+}
+
+function recommend(s) {
+  const ct=capTier(s.c); if(!ct) return null;
+  const E=s.e||0,M=s.m||0,R=s.r||0,C=s.c||0;
+  if(ct==='very_low'&&(E<3.5||M<3.5)){
+    const dims=[{dim:'Capital',score:C,advice:'Building a minimum launch budget before committing to any platform may reduce early operational risk.'},{dim:'Execution',score:E,advice:'Developing consistent operational habits before taking on platform complexity may support a more stable launch.'},{dim:'Market Creation',score:M,advice:'Clarifying your differentiation and buyer story before choosing a platform is typically a valuable early step.'},{dim:'Risk Appetite',score:R,advice:'Starting with smaller experiments can help build experience and reduce exposure.'}].sort((a,b)=>a.score-b.score);
+    return{state:'wait',weakest:dims[0]};
+  }
+  if(ct==='low'){
+    if(M>=E) return{state:'go',intro:'Your profile suggests an audience-first directional path may align with your current structure.',step1:{platform:'Niche / D2C',icon:'🎯',color:'#9b8ec4',why:'Your differentiation strength may be a viable entry asset. Building an owned audience channel could be a logical starting point.'},step2:{platform:'Shopify',icon:'🛍',color:'#4a8a5a',when:'Consider when monthly revenue demonstrates consistent traction with a proven content approach'}};
+    return{state:'go',intro:'Your profile suggests a low-barrier, execution-first directional path may align with your current structure.',step1:{platform:'Etsy',icon:'🧵',color:'#e8635a',why:'Operational readiness with limited capital may make a lower ad-spend entry viable. Early demand validation could be a useful first step.'},step2:{platform:E>=6?'Amazon':'Shopify',icon:E>=6?'📦':'🛍',color:E>=6?'#c4922a':'#4a8a5a',when:E>=6?'Consider when initial revenue demonstrates consistent traction and capital buffer grows':'Consider when initial revenue demonstrates consistent traction and brand direction clarifies'}};
+  }
+  if(ct==='medium'){
+    const grey=(E>=5.5&&M>=5.5)||(Math.abs(E-M)<2);
+    if(E>=6.5&&M<5) return{state:'go',greyZone:grey,intro:'Your profile suggests a structured marketplace entry may align with your operational strengths.',step1:{platform:'Amazon',icon:'📦',color:'#c4922a',why:'Execution discipline may be a primary structural asset. An operations-first platform could reward this tendency.'},step2:{platform:'Shopify',icon:'🛍',color:'#4a8a5a',when:'Consider building alongside once initial cash flow stabilises'}};
+    if(M>=6.5&&E<5) return{state:'go',greyZone:grey,intro:'Your profile suggests an owned-channel strategy may align with your brand strengths.',step1:{platform:'Shopify',icon:'🛍',color:'#4a8a5a',why:'Brand creation capability may be a primary structural asset. Building an owned audience channel could be a logical starting point.'},step2:{platform:'Etsy',icon:'🧵',color:'#e8635a',when:'Consider running alongside to validate product-market direction with lower risk'}};
+    return{state:'go',greyZone:true,intro:'Your profile shows balanced structural strengths — multiple directional paths may be worth evaluating.',step1:{platform:E>=M?'Amazon':'Shopify',icon:E>=M?'📦':'🛍',color:E>=M?'#c4922a':'#4a8a5a',why:E>=M?'A slight execution tendency may point toward an operations-first environment.':'A slight brand tendency may point toward an audience-building model.'},step2:{platform:'Etsy',icon:'🧵',color:'#e8635a',when:'Consider running alongside to validate demand and reduce platform concentration'}};
+  }
+  if(E>=M) return{state:'go',intro:'Your profile suggests a structured, capital-supported entry may be worth evaluating.',step1:{platform:'Amazon',icon:'📦',color:'#c4922a',why:'Capital and process alignment may support an inventory-first, PPC-driven approach.'},step2:{platform:'Shopify',icon:'🛍',color:'#4a8a5a',when:'Consider building alongside as a brand equity and owned-audience channel'}};
+  return{state:'go',intro:'Your profile suggests an owned-channel, brand-led approach may be worth evaluating.',step1:{platform:'Shopify',icon:'🛍',color:'#4a8a5a',why:'Capital and creative alignment may support a brand-first, margin-controlled approach.'},step2:{platform:'Amazon',icon:'📦',color:'#c4922a',when:'Consider adding once initial product-market direction validates at scale'}};
+}
+
+// ─── SUBMIT ───────────────────────────────────────────────────────────
+function submitAssessment() {
+  if(Object.keys(ans).length<19) return;
+  document.getElementById('cBtn').disabled=true;
+  document.getElementById('cBtn').textContent='Processing...';
+  document.getElementById('overlay').classList.add('show');
+  const s=score(), rec=recommend(s);
+  if(WEB_APP_URL && WEB_APP_URL.indexOf('script.google.com') !== -1){
+    const p=new URLSearchParams({clientEmail,capital:s.c,risk:s.r,execution:s.e,market:s.m,capitalTier:capTier(s.c),startPlatform:rec?.state==='wait'?'Wait':(rec?.step1?.platform||''),scalePlatform:rec?.state!=='wait'?(rec?.step2?.platform||''):'',greyZone:rec?.greyZone?'Yes':'No',waitState:rec?.state==='wait'?'Yes':'No',weakestMuscle:rec?.state==='wait'?rec.weakest.dim:''});
+    fetch(`${WEB_APP_URL}?${p}`,{method:'GET',mode:'no-cors'}).catch(()=>{});
+  }
+  setTimeout(()=>{ document.getElementById('overlay').classList.remove('show'); showResults(s,rec); },1800);
+}
+
+// ─── RESULTS ─────────────────────────────────────────────────────────
+function showResults(s,rec) {
+  if(BOOKING_URL && BOOKING_URL !== 'YOUR_BOOKING_LINK_HERE'){
+    document.getElementById('ctaBtn').href = BOOKING_URL;
+  }
+  drawRadar(s);
+  const slot = document.getElementById('directionSlot');
+  if(rec?.state==='wait'){
+    slot.innerHTML=`
+      <div class="wait-section">
+        <div class="wait-lbl">Initial Directional Insight</div>
+        <div class="wait-title">Preparatory Phase Indicated</div>
+        <div class="wait-body">
+          Your current profile suggests focusing on
+          <strong style="color:#d4a060">${rec.weakest.dim}</strong>
+          before committing to a specific marketplace.<br><br>
+          ${rec.weakest.advice}<br><br>
+          <em style="color:#3a3a3a;font-size:12px;">This recommendation highlights one possible directional consideration. Final strategic decisions require deeper interpretation and individual evaluation.</em>
+        </div>
+      </div>`;
+  } else {
+    slot.innerHTML=`
+      <div class="r-section">
+        <div class="r-section-eyebrow">Initial Directional Insight</div>
+        <div class="r-intro" style="font-size:12px;color:#444;margin-bottom:16px;">${rec.intro}</div>
+        <div class="dir-step">
+          <div class="dir-badge db1">1</div>
+          <div>
+            <div class="dir-lbl">Directional starting point</div>
+            <div class="dir-plat" style="color:${rec.step1.color}">${rec.step1.icon} ${rec.step1.platform}</div>
+            <div class="dir-why">${rec.step1.why}</div>
+          </div>
+        </div>
+        <div class="dir-step">
+          <div class="dir-badge db2">2</div>
+          <div>
+            <div class="dir-lbl">Possible progression</div>
+            <div class="dir-plat" style="color:${rec.step2.color}">${rec.step2.icon} ${rec.step2.platform}</div>
+            <div class="dir-when">↳ ${rec.step2.when}</div>
+          </div>
+        </div>
+        <div class="dir-caveat">This recommendation highlights one possible direction that may align with your profile. Final strategic decisions require deeper interpretation and product-level evaluation.</div>
+      </div>`;
+  }
+  show('resultsScreen');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── RADAR ────────────────────────────────────────────────────────────
+function drawRadar(s) {
+  const cv=document.getElementById('radarCanvas'),ctx=cv.getContext('2d');
+  const W=cv.width,H=cv.height,cx=W/2,cy=H/2+8,R=Math.min(W,H)/2-56,n=4;
+  const dims=['c','r','e','m'],labels=['Capital','Risk\nAppetite','Execution','Market\nCreation'],colors=['#c4922a','#4ecdc4','#e8635a','#9b8ec4'];
+  ctx.clearRect(0,0,W,H); ctx.fillStyle='#141414'; ctx.fillRect(0,0,W,H);
+  [0.25,0.5,0.75,1].forEach((t,i)=>{
+    ctx.beginPath();
+    for(let j=0;j<n;j++){const a=(Math.PI*2*j/n)-Math.PI/2;j===0?ctx.moveTo(cx+Math.cos(a)*R*t,cy+Math.sin(a)*R*t):ctx.lineTo(cx+Math.cos(a)*R*t,cy+Math.sin(a)*R*t);}
+    ctx.closePath(); ctx.strokeStyle=i===3?'#252525':'#1a1a1a'; ctx.lineWidth=i===3?1.5:1; ctx.stroke();
+  });
+  for(let j=0;j<n;j++){const a=(Math.PI*2*j/n)-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*R,cy+Math.sin(a)*R);ctx.strokeStyle='#1a1a1a';ctx.lineWidth=1;ctx.stroke();}
+  for(let j=0;j<n;j++){
+    const a=(Math.PI*2*j/n)-Math.PI/2,lx=cx+Math.cos(a)*(R+36),ly=cy+Math.sin(a)*(R+36);
+    ctx.fillStyle=colors[j];ctx.font='500 10px Syne,sans-serif';ctx.textAlign='center';
+    labels[j].split('\n').forEach((line,li,arr)=>ctx.fillText(line,lx,ly+(li-(arr.length-1)/2)*13));
+  }
+  const vals=dims.map(d=>s[d]!==null?s[d]/10:0);
+  ctx.beginPath();
+  for(let j=0;j<n;j++){const a=(Math.PI*2*j/n)-Math.PI/2,r=vals[j]*R;j===0?ctx.moveTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r):ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);}
+  ctx.closePath();ctx.fillStyle='rgba(196,146,42,0.08)';ctx.fill();ctx.strokeStyle='#c4922a';ctx.lineWidth=1.5;ctx.stroke();
+  for(let j=0;j<n;j++){
+    if(s[dims[j]]===null) continue;
+    const a=(Math.PI*2*j/n)-Math.PI/2,r=vals[j]*R,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;
+    ctx.beginPath();ctx.arc(x,y,8,0,Math.PI*2);ctx.fillStyle=colors[j]+'15';ctx.fill();
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=colors[j];ctx.fill();
+    ctx.strokeStyle='#141414';ctx.lineWidth=1.5;ctx.stroke();
+  }
+}
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+</script>
+</body>
+</html>
