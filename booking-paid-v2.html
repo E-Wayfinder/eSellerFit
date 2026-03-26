@@ -213,15 +213,14 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
   // Send to Google Sheet via Apps Script
   try {
     const payload = {
-      source: 'paid',
+      source: 'paid-booking',
       fullName: consentData.fullName,
       email: consentData.email,
       product: consentData.product,
+      price: consentData.price,
       consents: {
         clientAgreement: consentData.agreementAgreed,
-        refundPolicy: consentData.refundAgreed,
-        clientAgreementTimestamp: consentData.agreementTimestamp,
-        refundPolicyTimestamp: consentData.refundTimestamp
+        refundPolicy: consentData.refundAgreed
       },
       tracking: {
         ip: consentData.ipAddress,
@@ -233,7 +232,10 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
 
     const response = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     const result = await response.json();
@@ -242,14 +244,14 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     console.error('Error sending to Apps Script:', error);
   }
 
-  // Redirect to appropriate Calendly link
-  const calendlyLinks = {
+  // Redirect to appropriate Google Calendar link
+  const calendarLinks = {
     'entry-strategy-449': 'https://calendar.app.google/ubNQATo7m7RwRAoQ7',
     'entry-strategy-549': 'https://calendar.app.google/nyhhJT88TsFt9uxE6'
   };
   
   setTimeout(() => {
-    window.location.href = calendlyLinks[productValue];
+    window.location.href = calendarLinks[productValue];
   }, 500);
 });
 </script>
