@@ -183,7 +183,10 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
 
     const response = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
 
     const result = await response.json();
@@ -207,7 +210,7 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
 
   localStorage.setItem('esellerfit_free_call_consent', JSON.stringify(consentData));
 
-  // Redirect to Google Calendar (FIXED: Added https://)
+  // Redirect to Google Calendar
   setTimeout(() => {
     window.location.href = 'https://calendar.app.google/x1dHuHqqeXsrnJwaA';
   }, 500);
