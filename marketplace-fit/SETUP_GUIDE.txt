@@ -1,0 +1,177 @@
+================================================================================
+MARKETPLACE FIT CALCULATOR — COMPLETE PACKAGE
+================================================================================
+
+📦 WHAT'S INSIDE THIS PACKAGE:
+================================================================================
+
+marketplace-fit/
+├── marketplace-fit.html              ← Main calculator file
+├── README.md                         ← Documentation
+└── assets/
+    ├── css/
+    │   └── [COPY SHARED FILES HERE]
+    └── js/
+        ├── [COPY SHARED FILES HERE]
+        ├── marketplace-fit-data.js   ← Your questions & platforms
+        ├── marketplace-fit-engine.js ← Scoring logic
+        └── marketplace-fit-render.js ← Results display
+
+================================================================================
+STEP-BY-STEP SETUP (5 MINUTES):
+================================================================================
+
+STEP 1: UPLOAD NEW FILES TO GITHUB
+-----------------------------------
+1. Go to: https://github.com/eSellerFit/eSellerFit
+2. Create a NEW FOLDER called: "marketplace-fit"
+3. Upload these 5 files from this package:
+
+   📄 marketplace-fit.html
+   📄 marketplace-fit-data.js
+   📄 marketplace-fit-engine.js
+   📄 marketplace-fit-render.js
+   📄 README.md
+
+   Folder path: /marketplace-fit/
+
+
+STEP 2: COPY SHARED FILES FROM MARKET PRESSURE
+-----------------------------------------------
+These files ALREADY EXIST on your GitHub. Just copy them:
+
+FROM: /esellerfit-market-pressure/assets/css/
+  → COPY: shared-ui.css
+  → TO:   /marketplace-fit/assets/css/
+
+FROM: /esellerfit-market-pressure/assets/js/
+  → COPY: config.js
+  → COPY: calculator-shell.js
+  → TO:   /marketplace-fit/assets/js/
+
+
+STEP 3: TEST IT LIVE
+--------------------
+Once files are uploaded, visit:
+
+🌐 https://esellerfit.com/marketplace-fit/marketplace-fit.html
+
+You should see:
+✅ Bright welcome screen
+✅ "Marketplace Fit Calculator" title
+✅ 3 layer preview cards
+✅ Email input
+✅ Product category input
+✅ Consent checkbox
+✅ "Start Assessment" button
+
+
+STEP 4: NEXT TASKS (DO LATER)
+-----------------------------
+□ Create legal pages at /legal/:
+  - /legal/terms.html
+  - /legal/privacy.html
+  - /legal/disclaimer.html
+  - /legal/client-agreement.html
+  - /legal/refund-policy.html
+
+□ Set Google Apps Script URL in config.js:
+  appsScriptUrl: 'https://script.google.com/macros/d/YOUR_ID/useTrigger'
+
+□ Update landing page index.html with link to calculator
+
+================================================================================
+FILE DESCRIPTIONS:
+================================================================================
+
+marketplace-fit.html
+  → Entry point with welcome screen, questions, and results container
+  → Includes universal consent checkbox + footer
+  → Loads all JavaScript files
+
+marketplace-fit-data.js (PROTECTED - DO NOT MODIFY)
+  → All 12 questions for the calculator
+  → Platform info: Amazon, Shopify, Etsy
+  → Weights and scoring metadata
+  → Your consulting methodology
+
+marketplace-fit-engine.js (PROTECTED - DO NOT MODIFY)
+  → Scoring calculations
+  → Layer insights
+  → Platform explanations
+  → All logic to compute results
+
+marketplace-fit-render.js (UI LAYER)
+  → Displays results on screen
+  → Original dark design preserved
+  → Shows platform cards, bars, insights
+  → Includes CTA and advisory notice
+
+README.md
+  → Full documentation
+  → How the calculator works
+  → What to customize
+  → Troubleshooting guide
+
+shared-ui.css (SHARED - Copy from market-pressure)
+  → All colors, fonts, and styling
+  → Same for all calculators
+
+calculator-shell.js (SHARED - Copy from market-pressure)
+  → Form validation logic
+  → Question rendering
+  → Progress tracking
+  → Lead submission
+
+config.js (SHARED - Copy from market-pressure)
+  → Google Apps Script URL
+  → Calendly booking link
+  → GA4 ID
+
+================================================================================
+WHAT'S PROTECTED (DO NOT CHANGE):
+================================================================================
+
+❌ Question wording
+❌ Question order
+❌ Scoring values (2, 5, 8.5)
+❌ Platform weights
+❌ Layer insights
+❌ Results interpretation
+
+✅ WHAT YOU CAN CHANGE:
+✅ Colors and styling (in render.js)
+✅ Layout and spacing
+✅ Typography
+✅ Button labels
+
+================================================================================
+IF SOMETHING BREAKS:
+================================================================================
+
+Error: "ESF_SHELL is not defined"
+→ All JavaScript files loaded? Check browser console (F12)
+→ Paths correct? Should be ./assets/js/calculator-shell.js
+
+Error: "Cannot read properties of undefined"
+→ Missing shared files? Make sure you copied config.js and calculator-shell.js
+
+Legal links showing 404?
+→ Create the /legal/ folder with 5 HTML files
+
+Results not showing?
+→ All 12 questions answered? Check form validation
+→ Check browser console for errors
+
+================================================================================
+NEED HELP?
+================================================================================
+
+See README.md for complete documentation.
+See DOWNLOAD_INSTRUCTIONS.txt for file details.
+
+✅ YOU'RE READY TO DEPLOY!
+
+Questions? Check the README.md in the marketplace-fit folder.
+
+================================================================================

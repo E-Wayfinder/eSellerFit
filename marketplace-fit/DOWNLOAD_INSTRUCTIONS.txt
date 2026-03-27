@@ -1,0 +1,60 @@
+================================================================================
+MARKETPLACE FIT CALCULATOR — FILES TO DOWNLOAD
+================================================================================
+
+All files are ready to download from the outputs folder.
+
+DOWNLOAD THESE 4 FILES:
+================================================================================
+
+1. marketplace-fit.html
+   → Main HTML file (copy into GitHub folder root)
+
+2. marketplace-fit-data.js
+   → Questions and platform data (copy into assets/js/)
+
+3. marketplace-fit-engine.js
+   → Scoring logic (copy into assets/js/)
+
+4. marketplace-fit-render.js
+   → Results display (copy into assets/js/)
+
+5. README.md
+   → Documentation (copy into folder root)
+
+================================================================================
+COPY THESE 3 FILES FROM EXISTING MARKET PRESSURE CALCULATOR:
+================================================================================
+
+These files ALREADY EXIST in your GitHub. Just copy them:
+
+1. shared-ui.css
+   → From: esellerfit-market-pressure/assets/css/
+   → Copy to: marketplace-fit/assets/css/
+
+2. calculator-shell.js
+   → From: esellerfit-market-pressure/assets/js/
+   → Copy to: marketplace-fit/assets/js/
+
+3. config.js
+   → From: esellerfit-market-pressure/assets/js/
+   → Copy to: marketplace-fit/assets/js/
+
+================================================================================
+GITHUB FOLDER STRUCTURE (FINAL):
+================================================================================
+
+marketplace-fit/
+├── marketplace-fit.html              [NEW - Download from outputs]
+├── README.md                         [NEW - Download from outputs]
+└── assets/
+    ├── css/
+    │   └── shared-ui.css             [COPY from market-pressure]
+    └── js/
+        ├── config.js                 [COPY from market-pressure]
+        ├── calculator-shell.js       [COPY from market-pressure]
+        ├── marketplace-fit-data.js   [NEW - Download from outputs]
+        ├── marketplace-fit-engine.js [NEW - Download from outputs]
+        └── marketplace-fit-render.js [NEW - Download from outputs]
+
+================================================================================
