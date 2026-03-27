@@ -1,1 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Market Pressure Scanner | eSellerFit</title>
+  <link rel="stylesheet" href="./assets/css/shared-ui.css">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XYYCWXC1RV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-XYYCWXC1RV');
+  </script>
+</head>
+<body>
+  <main class="esf-page">
+    <div class="esf-container">
+      <!-- Welcome Screen -->
+      <section id="welcome-screen" class="esf-card">
+        <h1 class="esf-title">Market Pressure Scanner</h1>
+        <p class="esf-subtitle">
+          Assess competitive pressure in your product category — the first step to understanding whether entry is viable.
+        </p>
 
+        <div class="esf-form-row">
+          <label class="esf-label" for="emailInput">Your Email</label>
+          <input
+            id="emailInput"
+            class="esf-input"
+            type="email"
+            placeholder="you@company.com"
+          >
+        </div>
+
+        <div class="esf-form-row">
+          <label class="esf-label" for="categoryInput">Product Category</label>
+          <input
+            id="categoryInput"
+            class="esf-input"
+            type="text"
+            placeholder="e.g. coffee makers, pet beds, desk organizers"
+          >
+        </div>
+
+        <label class="esf-checkbox-row">
+          <input id="consentCheck" type="checkbox">
+          <span>
+            I understand this tool provides directional advisory insight for educational purposes only,
+            and that all business decisions are my own responsibility.
+            <a href="/legal/disclaimer.html" target="_blank" style="color: #0f6e56; text-decoration: none;">See disclaimer →</a>
+          </span>
+        </label>
+
+        <div class="esf-actions">
+          <button id="startBtn" class="esf-btn esf-btn-primary" disabled>Start Assessment</button>
+        </div>
+
+        <div id="welcome-legal-links" class="esf-legal-links"></div>
+      </section>
+
+      <!-- Assessment Screen -->
+      <section id="assessment-screen" class="esf-hidden">
+        <div style="margin-bottom: 32px;">
+          <div class="esf-progress"><div id="progressBar" class="esf-progress-bar"></div></div>
+          <div id="progressText" class="esf-progress-meta"></div>
+        </div>
+
+        <div id="questions-container"></div>
+
+        <div class="esf-actions" style="margin-top: 40px;">
+          <button id="submitBtn" class="esf-btn esf-btn-primary">Calculate My Score</button>
+        </div>
+
+        <div id="assessmentError" class="esf-error esf-hidden">
+          Please answer all questions before calculating your score.
+        </div>
+      </section>
+
+      <!-- Results Screen -->
+      <section id="results-screen" class="esf-hidden">
+        <div id="results-container"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/calculator-shell.js"></script>
+  <script src="./assets/js/market-pressure-data.js"></script>
+  <script src="./assets/js/market-pressure-engine.js"></script>
+  <script src="./assets/js/market-pressure-render.js"></script>
+
+  <!-- Initialization -->
+  <script>
+    const screenIds = ['welcome-screen', 'assessment-screen', 'results-screen'];
+    let clientEmail = '';
+    let clientCategory = '';
+
+    // Setup welcome screen
+    ESF_SHELL.renderLegalLinks('welcome-legal-links', false);
+
+    ESF_SHELL.bindStartGate({
+      emailId: 'emailInput',
+      consentId: 'consentCheck',
+      startBtnId: 'startBtn',
+      extraRequiredIds: ['categoryInput']
+    });
+
+    // Start assessment
+    document.getElementById('startBtn').addEventListener('click', () => {
+      clientEmail = document.getElementById('emailInput').value.trim();
+      clientCategory = document.getElementById('categoryInput').value.trim();
+
+      ESF_SHELL.showOnly(screenIds, 'assessment-screen');
+      ESF_SHELL.renderQuestions(
+        'questions-container',
+        MARKET_PRESSURE_DATA.questions,
+        MARKET_PRESSURE_DATA.answerPrefix
+      );
+      ESF_SHELL.bindProgress(
+        MARKET_PRESSURE_DATA.answerPrefix,
+        MARKET_PRESSURE_DATA.totalQuestions,
+        'progressBar',
+        'progressText'
+      );
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Track event
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'assessment_started', {
+          calculator: MARKET_PRESSURE_DATA.id,
+          category: clientCategory
+        });
+      }
+    });
+
+    // Submit assessment
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      const errorEl = document.getElementById('assessmentError');
+
+      // Validate all answered
+      if (
+        !ESF_SHELL.allQuestionsAnswered(
+          MARKET_PRESSURE_DATA.answerPrefix,
+          MARKET_PRESSURE_DATA.totalQuestions
+        )
+      ) {
+        errorEl.classList.remove('esf-hidden');
+        return;
+      }
+      errorEl.classList.add('esf-hidden');
+
+      // Collect answers
+      const answers = ESF_SHELL.collectAnswers(
+        MARKET_PRESSURE_DATA.answerPrefix,
+        MARKET_PRESSURE_DATA.totalQuestions
+      );
+
+      // Calculate scores
+      const result = MARKET_PRESSURE_ENGINE.calculate(answers, MARKET_PRESSURE_DATA);
+
+      // Submit lead data
+      await ESF_SHELL.submitLead({
+        calculator: MARKET_PRESSURE_DATA.id,
+        category: clientCategory,
+        email: clientEmail,
+        answers,
+        result
+      });
+
+      // Show results
+      ESF_SHELL.showOnly(screenIds, 'results-screen');
+      MARKET_PRESSURE_RENDER.renderResults('results-container', result, clientCategory);
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Track event
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'assessment_completed', {
+          calculator: MARKET_PRESSURE_DATA.id,
+          category: clientCategory,
+          pressure_index: result.index,
+          ocean: result.ocean,
+          dominant_force: result.dominant
+        });
+      }
+    });
+  </script>
+</body>
+</html>
