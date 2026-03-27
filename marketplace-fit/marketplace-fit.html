@@ -51,8 +51,94 @@
         <div class="esf-actions">
           <button id="startBtn" class="esf-btn esf-btn-primary" disabled>Start Assessment</button>
         </div>
-        <footer style="text-align: center; padding: 24px 0; border-top: 1px solid #d8d0c4; margin-top: 40px;">
-          <div style="font-size: 11px; color: #7a7065; line-height: 1.8;">
-            <a href="/legal/terms.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">Terms of Service</a>
-            <span style="color: #d8d0c4;">|</span>
-            <a href="/legal/privacy.html" target="_blank" style="color: #7a7065; text-decoration: none; mar
+      </section>
+      <section id="assessment-screen" class="esf-hidden">
+        <div style="margin-bottom: 32px;">
+          <div class="esf-progress"><div id="progressBar" class="esf-progress-bar"></div></div>
+          <div id="progressText" class="esf-progress-meta"></div>
+        </div>
+        <div id="questions-container"></div>
+        <div class="esf-actions" style="margin-top: 40px;">
+          <button id="submitBtn" class="esf-btn esf-btn-primary">Calculate My Fit</button>
+        </div>
+        <div id="assessmentError" class="esf-error esf-hidden">Please answer all questions before calculating your fit.</div>
+      </section>
+      <section id="results-screen" class="esf-hidden">
+        <div id="results-container"></div>
+      </section>
+    </div>
+    <footer style="text-align: center; padding: 24px; border-top: 1px solid #d8d0c4; margin-top: 40px;">
+      <div style="font-size: 11px; color: #7a7065; line-height: 1.8;">
+        <a href="/legal/terms.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">Terms of Service</a>
+        <span style="color: #d8d0c4;">|</span>
+        <a href="/legal/privacy.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">Privacy Policy</a>
+        <span style="color: #d8d0c4;">|</span>
+        <a href="/legal/disclaimer.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">Disclaimer</a>
+        <span style="color: #d8d0c4;">|</span>
+        <a href="/legal/client-agreement.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">Client Agreement</a>
+        <span style="color: #d8d0c4;">|</span>
+        <a href="/legal/refund-policy.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">Refund Policy</a>
+      </div>
+    </footer>
+  </main>
+  <script src="/marketplace-fit/assets/js/config.js"></script>
+  <script src="/marketplace-fit/assets/js/calculator-shell.js"></script>
+  <script src="/marketplace-fit/assets/js/marketplace-fit-data.js"></script>
+  <script src="/marketplace-fit/assets/js/marketplace-fit-engine.js"></script>
+  <script src="/marketplace-fit/assets/js/marketplace-fit-render.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const screenIds = ['welcome-screen', 'assessment-screen', 'results-screen'];
+      let clientEmail = '';
+      let clientCategory = '';
+      
+      ESF_SHELL.bindStartGate({
+        emailId: 'emailInput',
+        consentId: 'consentCheck',
+        consentAllId: 'consentCheckAll',
+        startBtnId: 'startBtn',
+        extraRequiredIds: ['categoryInput']
+      });
+      
+      document.getElementById('startBtn').addEventListener('click', () => {
+        clientEmail = document.getElementById('emailInput').value.trim();
+        clientCategory = document.getElementById('categoryInput').value.trim();
+        
+        ESF_SHELL.showOnly(screenIds, 'assessment-screen');
+        ESF_SHELL.renderQuestions('questions-container', MARKETPLACE_FIT_DATA.questions, MARKETPLACE_FIT_DATA.answerPrefix);
+        ESF_SHELL.bindProgress(MARKETPLACE_FIT_DATA.answerPrefix, MARKETPLACE_FIT_DATA.totalQuestions, 'progressBar', 'progressText');
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'assessment_started', {calculator: MARKETPLACE_FIT_DATA.id, category: clientCategory});
+        }
+      });
+      
+      document.getElementById('submitBtn').addEventListener('click', async () => {
+        const errorEl = document.getElementById('assessmentError');
+        
+        if (!ESF_SHELL.allQuestionsAnswered(MARKETPLACE_FIT_DATA.answerPrefix, MARKETPLACE_FIT_DATA.totalQuestions)) {
+          errorEl.classList.remove('esf-hidden');
+          return;
+        }
+        errorEl.classList.add('esf-hidden');
+        
+        const answers = ESF_SHELL.collectAnswers(MARKETPLACE_FIT_DATA.answerPrefix, MARKETPLACE_FIT_DATA.totalQuestions);
+        const result = MARKETPLACE_FIT_ENGINE.calculate(answers, MARKETPLACE_FIT_DATA);
+        
+        await ESF_SHELL.submitLead({calculator: MARKETPLACE_FIT_DATA.id, category: clientCategory, email: clientEmail, answers, result});
+        
+        ESF_SHELL.showOnly(screenIds, 'results-screen');
+        MARKETPLACE_FIT_RENDER.renderResults('results-container', result, clientCategory);
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'assessment_completed', {calculator: MARKETPLACE_FIT_DATA.id, category: clientCategory, amazon_fit: result.platformScores.amazon, shopify_fit: result.platformScores.shopify, etsy_fit: result.platformScores.etsy, top_platform: result.topPlatform});
+        }
+      });
+    });
+  </script>
+</body>
+</html>
