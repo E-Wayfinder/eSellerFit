@@ -8,7 +8,7 @@ window.MARKETPLACE_FIT_DATA = {
   title: 'Marketplace Fit Calculator',
   description: 'Understand which platform aligns with your business',
   totalQuestions: 12,
-  answerPrefix: 'mf_',
+  answerPrefix: 'q',
 
   // 3-Layer Framework: Customer Fit (Q1-4), Operational Fit (Q5-8), Financial Fit (Q9-12)
   questions: [
