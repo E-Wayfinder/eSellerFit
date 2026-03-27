@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XYYCWXC1RV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XYYCWXC1RV');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eSellerFit — Market Pressure Scanner</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg:#f5f2eb; --ink:#1a1a1a; --muted:#7a7065; --border:#d8d0c4; --card:#fff;
+  --gold:#caa25f; --gold-l:#f5ecd8; --gold-d:#a07020;
+  --teal:#0f6e56; --teal-l:#d0ecdf;
+  --red:#c43a2a;  --red-l:#f5ddd8;
+  --violet:#5a3a8a; --violet-l:#e8d8f5;
+  --amber:#b8620a; --amber-l:#fdecd0;
+  --dark:#1a1a22; --dark2:#222230; --dark3:#2a2a38;
+  --t1:#e8e8e8; --t2:#b8b8c8; --t3:#888898; --t4:#585868;
+  --demand:#0f6e56;  --demand-l:#d0ecdf;
+  --supply:#9b8ec4;  --supply-l:#ede8f7;
+  --ads:#d48a3a;     --ads-l:#faecd4;
+  --margin:#3a9e78;  --margin-l:#d4f0e6;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--ink);font-family:'Syne',sans-serif;min-height:100vh;}
+.screen{display:none;}
+.screen.active{display:flex;flex-direction:column;justify-content:flex-start;}
+#welcomeScreen{
+  background:linear-gradient(155deg,#0a2218 0%,#0f2a1e 55%,#091a10 100%);
+  align-items:center;justify-content:center;
+  padding:80px 48px 88px;
+  position:relative;overflow:hidden;
+}
+#welcomeScreen::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse at 75% 15%, rgba(15,110,86,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse at 15% 85%, rgba(58,158,120,0.07) 0%, transparent 50%);
+  pointer-events:none;
+}
+#welcomeScreen::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.005) 3px,rgba(255,255,255,0.005) 4px);
+  pointer-events:none;
+}
+.w-inner{
+  max-width:840px;width:100%;
+  position:relative;z-index:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-areas:"brand brand" "left right" "foot foot";
+  gap:0 64px;
+  align-items:start;
+}
+.w-brand{grid-area:brand;display:flex;align-items:center;gap:12px;margin-bottom:60px;}
+.w-logo{width:42px;height:42px;background:var(--teal);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:13px;color:#fff;font-weight:600;}
+.w-brand-name{font-family:'Playfair Display',serif;font-size:16px;color:var(--t3);letter-spacing:0.03em;}
+.w-left{grid-area:left;}
+.w-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.2em;color:var(--demand);margin-bottom:24px;}
+.w-title{font-family:'Playfair Display',serif;font-size:36px;color:var(--t1);line-height:1.16;margin-bottom:26px;font-weight:600;}
+.w-sub{font-size:15px;color:var(--t2);line-height:1.85;margin-bottom:32px;}
+.w-confidence{font-size:13px;color:var(--t3);line-height:1.75;padding:18px 22px;border-left:2px solid rgba(15,110,86,0.3);background:rgba(15,110,86,0.06);border-radius:0 6px 6px 0;font-style:italic;margin-bottom:24px;}
+.w-intro-nudge{display:flex;align-items:center;gap:12px;padding:14px 18px;border:1px solid rgba(15,110,86,0.2);border-radius:8px;background:rgba(15,110,86,0.04);}
+.w-intro-nudge span{font-size:13px;color:var(--t3);}
+.w-intro-nudge a{font-size:13px;color:var(--demand);text-decoration:none;border-bottom:1px solid rgba(15,110,86,0.3);white-space:nowrap;transition:border-color 0.2s;}
+.w-intro-nudge a:hover{border-color:var(--demand);}
+.w-right{grid-area:right;}
+.w-form-card{background:#122218;border:1px solid #1e3828;border-radius:12px;padding:40px 36px;box-shadow:0 28px 64px rgba(0,0,0,0.4);}
+.w-field-label{font-size:10px;text-transform:uppercase;letter-spacing:0.16em;color:var(--t3);margin-bottom:10px;font-family:'JetBrains Mono',monospace;}
+.w-input{width:100%;padding:15px 18px;border-radius:7px;border:1.5px solid #254030;background:#0c1810;color:var(--t1);font-family:'Syne',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s,box-shadow 0.2s;margin-bottom:28px;}
+.w-input::placeholder{color:#2a4030;}
+.w-input:focus{border-color:var(--demand);box-shadow:0 0 0 3px rgba(15,110,86,0.1);}
+.w-consent{display:flex;align-items:flex-start;gap:12px;margin-bottom:28px;cursor:pointer;}
+.w-consent input[type=checkbox]{width:17px;height:17px;border:1.5px solid #333;border-radius:4px;background:#0c1810;cursor:pointer;flex-shrink:0;margin-top:2px;accent-color:#0f6e56;}
+.w-consent-txt{font-size:12px;color:var(--t3);line-height:1.7;}
+.w-consent-txt a{color:var(--demand);text-decoration:none;border-bottom:1px solid rgba(15,110,86,0.35);}
+.w-consent-txt a:hover{border-color:var(--demand);}
+.w-btn{width:100%;padding:17px;border-radius:7px;border:none;background:var(--demand);color:#fff;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.03em;}
+.w-btn:hover:not(:disabled){background:#0f8a6a;transform:translateY(-2px);box-shadow:0 8px 28px rgba(15,110,86,0.28);}
+.w-btn:disabled{opacity:0.22;cursor:not-allowed;transform:none;}
+.w-microcopy{font-size:11px;color:var(--t4);margin-top:18px;line-height:1.8;text-align:center;}
+.w-microcopy span{display:block;}
+.w-microcopy .w-legal-note{color:#4a5a50;font-style:italic;margin-top:6px;}
+.w-footer{grid-area:foot;margin-top:64px;display:flex;gap:24px;flex-wrap:wrap;justify-content:center;padding-top:24px;border-top:1px solid #1e2e24;}
+.w-footer a{font-size:10px;color:#2e4a38;text-decoration:none;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;}
+.w-footer a:hover{color:#686868;}
+#assessScreen{background:var(--bg);}
+.a-hdr{background:#1e1e28;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.a-logo{display:flex;align-items:center;gap:12px;}
+.a-logo-box{width:32px;height:32px;background:var(--demand);border-radius:4px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;color:#fff;}
+.a-logo-name{font-family:'Playfair Display',serif;font-size:16px;color:#e0e0e8;}
+.a-sub{font-size:10px;color:#606070;margin-top:1px;font-family:'JetBrains Mono',monospace;}
+.a-prog{display:flex;align-items:center;gap:12px;}
+.a-prog-txt{font-family:'JetBrains Mono',monospace;font-size:11px;color:#606070;}
+.a-prog-bg{width:120px;height:2px;background:#30303e;border-radius:2px;}
+.a-prog-fill{height:2px;background:var(--demand);border-radius:2px;transition:width 0.4s ease;width:0%;}
+.a-body{max-width:740px;margin:0 auto;padding:24px 32px 140px;}
+.dim-block{margin-bottom:56px;}
+.dim-block+.dim-block{padding-top:48px;border-top:1px solid var(--border);}
+.dim-hdr{display:flex;align-items:flex-start;gap:14px;margin-bottom:28px;}
+.dim-tag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.1em;flex-shrink:0;margin-top:3px;}
+.td{background:var(--demand-l);color:var(--demand);}
+.ts{background:var(--supply-l);color:var(--supply);}
+.ta{background:var(--ads-l);color:var(--ads);}
+.tm{background:var(--margin-l);color:var(--margin);}
+.dim-name{font-family:'Playfair Display',serif;font-size:20px;}
+.dim-desc{font-size:13px;color:var(--muted);margin-top:3px;}
+.q-block{margin-bottom:24px;animation:up 0.3s ease both;}
+@keyframes up{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.q-lbl{font-size:14px;font-weight:600;margin-bottom:10px;display:flex;gap:10px;line-height:1.55;}
+.q-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);flex-shrink:0;padding-top:3px;}
+.opts{display:flex;flex-direction:column;gap:6px;}
+.opt{display:flex;align-items:center;gap:12px;padding:11px 14px;border:1.5px solid var(--border);border-radius:6px;background:var(--card);cursor:pointer;font-family:'Syne',sans-serif;width:100%;text-align:left;transition:all 0.12s;}
+.opt:hover{border-color:#0f6e56;background:var(--demand-l);}
+.opt.sel{border-color:#0f6e56;background:var(--demand-l);}
+.dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;transition:all 0.12s;}
+.opt.sel .dot{background:#0f6e56;border-color:#0f6e56;}
+.opt-txt{font-size:13px;color:var(--ink);line-height:1.4;}
+.opt-score{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);margin-left:auto;padding-left:12px;flex-shrink:0;}
+.opt.sel .opt-score{color:var(--demand);}
+.c-bar{position:fixed;bottom:0;left:0;right:0;background:#1e1e28;padding:18px 48px;display:flex;align-items:center;justify-content:space-between;gap:20px;z-index:100;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);border-top:1px solid #2e2e3e;}
+.c-bar.show{transform:translateY(0);}
+.c-msg{font-size:14px;color:#606070;}
+.c-msg strong{color:#e0e0e8;}
+.c-btn{padding:14px 32px;border-radius:6px;border:none;background:#0f6e56;color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.c-btn:hover:not(:disabled){background:#0f8a6a;}
+.c-btn:disabled{opacity:0.5;cursor:not-allowed;}
+#resultsScreen{background:var(--dark);padding:88px 48px 112px;}
+.r-inner{max-width:920px;margin:0 auto;}
+.r-brand{display:flex;align-items:center;gap:12px;margin-bottom:60px;}
+.r-logo{width:38px;height:38px;background:var(--teal);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:#fff;}
+.r-brand-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--t4);}
+.r-hdr{margin-bottom:60px;}
+.r-title{font-family:'Playfair Display',serif;font-size:34px;color:var(--t1);line-height:1.2;margin-bottom:20px;}
+.r-intro{font-size:15px;color:#d0d0d8;line-height:1.82;margin-bottom:12px;}
+.r-section{background:var(--dark2);border:1px solid #343448;border-radius:12px;padding:40px;margin-bottom:24px;}
+.r-section-eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:0.18em;color:var(--t4);font-family:'JetBrains Mono',monospace;margin-bottom:12px;}
+.r-section-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--t1);margin-bottom:20px;}
+.index-card{border-radius:12px;padding:44px;margin-bottom:24px;border:1.5px solid;position:relative;}
+.index-blue{background:rgba(15,110,86,0.08);border-color:#0f6e56;}.index-amber{background:rgba(184,98,10,0.08);border-color:#b8620a;}
+.index-red{background:rgba(196,58,42,0.08);border-color:#c43a2a;}
+.index-card-label{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:8px;}
+.index-card-zone{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;}
+.index-number{font-family:'JetBrains Mono',monospace;font-size:64px;font-weight:700;line-height:1;}
+.index-zone-txt{display:flex;flex-direction:column;}
+.zone-range{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t4);}
+.zone-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:600;margin-top:2px;}
+.index-body{font-size:14px;color:#d8d8e8;line-height:1.82;margin-top:14px;}
+.force-section{margin-bottom:24px;}
+.force-rows{display:flex;flex-direction:column;gap:16px;}
+.force-row{display:flex;align-items:center;gap:14px;padding:12px 0;}
+.force-label{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;width:100px;flex-shrink:0;}
+.force-bar-wrap{flex:1;height:6px;background:#2e2e3e;border-radius:3px;overflow:hidden;}
+.force-bar-fill{height:6px;border-radius:3px;}
+.force-score-txt{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;width:40px;text-align:right;flex-shrink:0;}
+.force-dominant-badge{font-size:9px;text-transform:uppercase;letter-spacing:0.12em;padding:4px 10px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-weight:600;white-space:nowrap;}
+.dominant-card{border-radius:12px;padding:40px;margin-bottom:24px;border:1.5px solid;}
+.dominant-card-demand{background:rgba(15,110,86,0.08);border-color:#0f6e56;}
+.dominant-card-supply{background:rgba(155,142,196,0.08);border-color:#9b8ec4;}
+.dominant-card-ads{background:rgba(212,138,58,0.08);border-color:#d48a3a;}
+.dominant-card-margin{background:rgba(58,158,120,0.08);border-color:#3a9e78;}
+.dominant-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.15em;margin-bottom:10px;}
+.dominant-title{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:12px;}
+.dominant-what{font-size:14px;color:var(--t3);line-height:1.82;margin-bottom:20px;padding:16px;background:rgba(0,0,0,0.2);border-radius:6px;border-left:3px solid;}
+.dominant-action-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.12em;margin-top:20px;margin-bottom:10px;color:var(--t4);}
+.dominant-action{font-size:14px;line-height:1.82;padding:16px;background:rgba(0,0,0,0.15);border-radius:6px;}
+.result-intro-nudge{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 24px;margin-bottom:24px;background:rgba(15,110,86,0.05);border:1px solid rgba(15,110,86,0.2);border-radius:8px;flex-wrap:wrap;}
+.result-intro-nudge span{font-size:13px;color:var(--t3);}
+.result-intro-nudge a{font-size:13px;color:var(--teal);text-decoration:none;border-bottom:1px solid rgba(15,110,86,0.3);white-space:nowrap;transition:border-color 0.2s;}
+.result-intro-nudge a:hover{border-color:var(--teal);}
+.cta-section{background:linear-gradient(140deg,#111828,#141c28);border:1.5px solid rgba(15,110,86,0.4);border-radius:12px;padding:52px 48px;margin-bottom:24px;}
+.cta-eyebrow{font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:var(--teal);font-family:'JetBrains Mono',monospace;margin-bottom:16px;}
+.cta-title{font-family:'Playfair Display',serif;font-size:28px;color:var(--t1);line-height:1.2;margin-bottom:22px;}
+.cta-list{list-style:none;margin-bottom:26px;}
+.cta-list li{font-size:14px;color:var(--t3);line-height:1.72;padding:7px 0;display:flex;gap:14px;}
+.cta-list li::before{content:'—';color:var(--teal);opacity:0.55;flex-shrink:0;}
+.cta-price{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--t4);margin-bottom:28px;padding:14px 0;border-top:1px solid #1e3028;border-bottom:1px solid #1e3028;}
+.cta-price strong{color:var(--t2);}
+.cta-consent{display:flex;align-items:flex-start;gap:12px;margin-bottom:24px;}
+.cta-consent input[type=checkbox]{width:15px;height:15px;border:1px solid #2a3a28;background:#141e18;cursor:pointer;flex-shrink:0;margin-top:2px;accent-color:var(--teal);}
+.cta-consent-txt{font-size:12px;color:var(--t3);line-height:1.7;}
+.cta-btn{display:block;width:100%;padding:18px;border-radius:7px;border:none;background:var(--teal);color:#fff;font-family:'Syne',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.2s;text-align:center;text-decoration:none;}
+.cta-btn:hover:not(:disabled){background:#0f8a6a;transform:translateY(-2px);box-shadow:0 12px 36px rgba(15,110,86,0.3);}
+.cta-btn:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+.cta-or-talk{text-align:center;margin-top:20px;font-size:13px;color:var(--t4);}
+.cta-or-talk a{color:var(--t3);text-decoration:none;border-bottom:1px solid #3a3a4a;transition:color 0.2s,border-color 0.2s;}
+.cta-or-talk a:hover{color:var(--teal);border-color:var(--teal);}
+.cta-agreement{font-size:11px;color:#404050;text-align:center;margin-top:14px;line-height:1.6;}
+.cta-agreement a{color:var(--t4);text-decoration:none;border-bottom:1px solid #333;}
+.next-section{background:#1e1e2a;border:1px solid #2e2e3e;border-radius:12px;padding:40px;margin-bottom:24px;}
+.advisory-section{padding:28px 0;margin-bottom:24px;}
+.advisory-title{font-size:9px;text-transform:uppercase;letter-spacing:0.14em;color:#404050;font-family:'JetBrains Mono',monospace;margin-bottom:10px;}
+.advisory-body{font-size:12px;color:#404050;line-height:1.82;}
+.r-footer{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:44px;padding-top:32px;border-top:1px solid #252535;}
+.r-footer a{font-size:10px;color:#404050;text-decoration:none;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;}
+.r-footer a:hover{color:#686878;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:1000;}
+.overlay.show{display:flex;}
+.spinner{width:32px;height:32px;border:2px solid #2e2e3e;border-top-color:var(--teal);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.overlay-txt{font-family:'JetBrains Mono',monospace;font-size:11px;color:#505060;letter-spacing:0.1em;}
+@media(max-width:880px){.w-inner{grid-template-columns:1fr;grid-template-areas:"brand" "left" "right" "foot";gap:0;}.w-right{margin-top:40px;}#welcomeScreen{padding:56px 28px 64px;}.w-title{font-size:30px;}}
+@media(max-width:720px){.r-inner{max-width:100%;} #resultsScreen{padding:56px 24px 72px;}.r-section,.next-section,.cta-section{padding:30px 24px;}.r-title{font-size:28px;}.a-hdr{padding:14px 20px;}.a-body{padding:16px 20px 120px;}.c-bar{padding:14px 20px;flex-direction:column;}.c-btn{width:100%;}.result-intro-nudge{flex-direction:column;align-items:flex-start;}}
+</style>
+</head>
+<body>
+
+<div class="overlay" id="overlay">
+  <div class="spinner"></div>
+  <div class="overlay-txt">Scanning your market pressure...</div>
+</div>
+
+<!-- ══ SCREEN 1: WELCOME ══ -->
+<div class="screen active" id="welcomeScreen">
+  <div class="w-inner">
+    <a class="w-brand" href="https://esellerfit.com" style="text-decoration:none;">
+      <div class="w-logo">eSF</div>
+      <div class="w-brand-name">eSellerFit</div></a>
+    <div class="w-left">
+      <div class="w-eyebrow">Market Pressure · Free</div>
+      <div class="w-title">What's Actually Competing for Your Market?</div>
+      <div class="w-sub">Demand is only half the story. This scanner evaluates four cross-pressures — demand, supply, advertising, and margin — that reveal whether a market is blue ocean or red ocean before you commit capital.</div>
+      <div class="w-confidence">If you're guessing at market pressure, this diagnostic finds what you don't know.</div>
+      <div class="w-intro-nudge">
+        <span>Not sure where to start?</span>
+        <a href="https://calendly.com/gio_chakhidze/new-meeting">Talk to Gio first — free 30 min →</a>
+      </div>
+    </div>
+    <div class="w-right">
+      <div class="w-form-card">
+        <div class="w-field-label">Your Email Address</div>
+        <input class="w-input" id="emailInput" type="email" placeholder="Enter your email address" oninput="validateForm()" onkeydown="if(event.key==='Enter')startAssessment()"/>
+
+        <div class="w-field-label">Your Product Category</div>
+        <input class="w-input" id="categoryInput" type="text" placeholder="e.g., 'wireless earbuds', 'dog toys', 'yoga mats'" oninput="validateForm()" onkeydown="if(event.key==='Enter')startAssessment()"/>
+
+        <!-- CONSENT CHECKBOX -->
+        <label class="w-consent" id="consentLabel">
+          <input type="checkbox" id="consentCheck" onchange="validateForm()"/>
+          <span class="w-consent-txt">I agree to the <a href="https://esellerfit.com/legal/terms.html" target="_blank">Terms of Service</a>, <a href="https://esellerfit.com/legal/disclaimer.html" target="_blank">Disclaimer</a>, and <a href="https://esellerfit.com/legal/privacy.html" target="_blank">Privacy Policy</a> and understand that this tool provides directional insight only.</span>
+        </label>
+
+        <button class="w-btn" id="startBtn" onclick="startAssessment()" disabled>Start Free Assessment →</button>
+        <div class="w-microcopy">
+          <span>12 signals · about 4 minutes · free</span>
+          <span class="w-legal-note">Your Entry Strategy uses verified market data for the category you enter here.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-footer">
+      <a href="https://esellerfit.com/legal/terms.html">Terms of Service</a>
+      <a href="https://esellerfit.com/legal/privacy.html">Privacy Policy</a>
+      <a href="https://esellerfit.com/legal/disclaimer.html">Disclaimer</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2: ASSESSMENT ══ -->
+<div class="screen" id="assessScreen">
+  <div class="a-hdr">
+    <a class="a-logo" href="https://esellerfit.com" style="text-decoration:none;">
+      <div class="a-logo-box">eSF</div>
+      <div><div class="a-logo-name">eSellerFit</div><div class="a-sub" id="aSubtitle">Market Pressure Scanner</div></div>
+    </a>
+    <div class="a-prog">
+      <div class="a-prog-txt" id="progTxt">0 / 12</div>
+      <div class="a-prog-bg"><div class="a-prog-fill" id="progFill"></div></div>
+    </div>
+  </div>
+  <div class="a-body" id="aBody"></div>
+  <div class="c-bar" id="cBar">
+    <div class="c-msg"><strong>All signals recorded.</strong> Ready to generate your market pressure index.</div>
+    <button class="c-btn" id="cBtn" onclick="submitAssessment()">See My Index →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 3: RESULTS ══ -->
+<div class="screen" id="resultsScreen">
+  <div class="r-inner">
+    <a class="r-brand" href="https://esellerfit.com" style="text-decoration:none;"><div class="r-logo">eSF</div><div class="r-brand-name">eSellerFit</div></a>
+    <div class="r-hdr">
+      <div class="r-title">Your Market Pressure Index</div>
+      <div class="r-intro" id="categoryLine"></div>
+    </div>
+
+    <div class="index-card" id="indexCard" style="background: linear-gradient(135deg, rgba(15, 110, 86, 0.25), rgba(15, 110, 86, 0.15)); padding: 48px; border-radius: 16px; border: 2px solid rgba(15, 110, 86, 0.6);">
+      <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: #e8e8e8; margin-bottom: 20px; font-weight: 600;" id="indexCardLabel"></div>
+      <div style="display: flex; align-items: flex-start; gap: 32px; margin-bottom: 32px;">
+        <div style="position: relative;">
+          <div style="font-size: 140px; font-weight: 700; line-height: 1; color: #0f6e56; text-shadow: 0 2px 8px rgba(15, 110, 86, 0.3);" id="indexNumber">0.0</div>
+        </div>
+        <div style="padding-top: 12px;">
+          <div style="font-size: 14px; color: #b8b8c8; margin-bottom: 8px; font-weight: 500;" id="zoneLabel"></div>
+          <div style="font-size: 22px; color: #e8e8e8; font-weight: 600;" id="zoneName"></div>
+        </div>
+      </div>
+      <div style="font-size: 15px; color: #d8d8e8; line-height: 1.8; background: rgba(0, 0, 0, 0.25); padding: 20px; border-radius: 8px; border-left: 3px solid #0f6e56;" id="indexBody"></div>
+    </div>
+
+    <div class="r-section">
+      <div class="r-section-eyebrow">Four Forces at Work</div>
+      <div class="r-section-title">Your index is the average of these four pressures</div>
+      <div class="force-rows" id="forceRows"></div>
+    </div>
+
+    <div class="r-section" id="dominantSlot"></div>
+
+    <div class="result-intro-nudge">
+      <span>Not sure what this means for your specific product?</span>
+      <a href="https://calendly.com/gio_chakhidze/new-meeting">Talk to Gio first — free 30 min →</a>
+    </div>
+
+    <div class="cta-section">
+      <div class="cta-eyebrow">Next Step · Entry Strategy</div>
+      <div class="cta-title">Two Ways to Go Deeper</div>
+      <label class="cta-consent" id="bookingConsentLabel">
+        <input type="checkbox" id="bookingConsent" onchange="validateBooking()"/>
+        <span class="cta-consent-txt">✓ Check this box to confirm you understand this assessment is directional and that your final decisions are your own responsibility.</span>
+      </label>
+
+      <div style="border:1.5px solid rgba(202,162,95,0.35);border-radius:10px;padding:28px;background:rgba(202,162,95,0.03);margin-bottom:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.14em;color:#2a7a7a;margin-bottom:12px;">Option 1 · $449 — Recommended</div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--t1);margin-bottom:10px;">Entry Strategy Dossier</div>
+        <ul class="cta-list" style="margin-bottom:16px;">
+          <li>Your market pressure re-evaluated with verified data for your specific category</li>
+          <li>Platform recommendation based on your profile AND your market pressure</li>
+          <li>A complete entry plan — what to sell, where, how to enter, and what risks to manage</li>
+          <li>Written Entry Strategy Dossier + 60-minute walkthrough session</li>
+        </ul>
+        <div class="cta-price"><strong>Written dossier + 60-minute session · $449</strong></div>
+        <button type="button" id="ctaBtn" class="cta-btn" disabled onclick="window.location.href='https://calendly.com/gio_chakhidze/new-meeting';">
+          Get My Entry Strategy · $449 →
+        </button>
+      </div>
+
+      <div style="border:1px solid #2e2e3e;border-radius:10px;padding:28px;background:rgba(255,255,255,0.02);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:0.14em;color:#2a7a7a;margin-bottom:12px;">Option 2 · Free</div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;color:var(--t1);margin-bottom:10px;">Free Call with Gio</div>
+        <ul class="cta-list" style="margin-bottom:16px;">
+          <li>Get clarity on whether the Entry Strategy is right for you</li>
+          <li>Understand your market pressure signals and entry strategy</li>
+          <li>Leave with a specific next step recommendation</li>
+        </ul>
+        <div class="cta-price"><strong>30-minute call · Free</strong></div>
+        <button type="button" id="ctaBtn2" class="cta-btn" disabled onclick="window.location.href='https://calendly.com/gio_chakhidze/new-meeting';">
+          Book Free Call with Gio →
+        </button>
+      </div>
+
+      <div style="margin-top:24px;padding:16px 20px;border:1px solid #1a3028;border-radius:8px;background:rgba(15,110,86,0.04);text-align:center;">
+        <div style="font-size:12px;color:#505060;margin-bottom:8px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;">Ran all three free tools?</div>
+        <a href="https://calendly.com/gio_chakhidze/new-meeting" style="font-size:14px;color:#0f6e56;text-decoration:none;border-bottom:1px solid rgba(15,110,86,0.3);">You're ready — Book Entry Strategy · $449 →</a>
+      </div>
+
+      <div class="cta-or-talk">
+        Not ready to commit? <a href="https://calendly.com/gio_chakhidze/new-meeting">Book a free 30-min intro call first →</a>
+      </div>
+
+      <div class="cta-agreement">By booking you acknowledge the <a href="https://esellerfit.com/legal/client-agreement.html" target="_blank">Client Advisory Agreement</a>.</div>
+    </div>
+
+    <div class="next-section">
+      <div class="r-section-eyebrow">What Comes Next</div>
+      <div class="r-section-title" style="font-family:'Playfair Display',serif;font-size:20px;color:var(--t1);margin-bottom:12px;">You know the market pressure. The Entry Strategy adds your profile.</div>
+      <div style="font-size:14px;color:var(--t3);line-height:1.82;">Market pressure tells you the structural challenges. Your Entry Strategy combines this with your seller profile and platform fit — so you know not just whether entry is possible, but whether it's possible *for you*.</div>
+    </div>
+
+    <div class="advisory-section">
+      <div class="advisory-title">Advisory Notice</div>
+      <div class="advisory-body">This calculator provides directional insight based on user inputs. It does not constitute legal, financial, or investment advice. All business decisions remain the sole responsibility of the user. <a href="https://calendly.com/gio_chakhidze/new-meeting" style="color:#0f6e56;text-decoration:none;border-bottom:1px solid rgba(15,110,86,0.3);">A live session helps you interpret these results →</a></div>
+    </div>
+
+    <div class="r-footer">
+      <a href="https://esellerfit.com/legal/terms.html">Terms of Service</a>
+      <a href="https://esellerfit.com/legal/privacy.html">Privacy Policy</a>
+      <a href="https://esellerfit.com/legal/disclaimer.html">Disclaimer</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const BAND = {low:2, mid:5, high:8.5};
+const FORCE_META = {
+  d:{name:'Demand Pressure',color:'#0f6e56',hex:'#0f6e56'},
+  s:{name:'Supply Pressure',color:'#9b8ec4',hex:'#9b8ec4'},
+  a:{name:'Advertising Pressure',color:'#d48a3a',hex:'#d48a3a'},
+  m:{name:'Margin Corridor',color:'#3a9e78',hex:'#3a9e78'},
+};
+
+const WEB_APP_URL='https://script.google.com/macros/d/AKfycbzGxzKr_9opy2ZdnJQJ_91GmnR3K3OUqr0_YAsVicNHukMZvZZBrUpfG0nYdMf25bnb/useTrigger';
+const BOOKING_URL='https://calendly.com/gio_chakhidze/new-meeting';
+
+let clientEmail='', clientCategory='';
+const ans={};
+
+const QS=[
+  {id:'D1',force:'d',text:'Search volume for your product category is...',opts:[{text:'Very low — not much traffic',band:'low'},{text:'Moderate — some consistent searches',band:'mid'},{text:'High — clear buyer intent signals',band:'high'}]},
+  {id:'D2',force:'d',text:'Direction of demand — is interest growing, stable, or declining?',opts:[{text:'Declining or unstable',band:'low'},{text:'Stable and consistent',band:'mid'},{text:'Growing — new audience entering',band:'high'}]},
+  {id:'D3',force:'d',text:'Buyer intent for your category is driven by...',opts:[{text:'Problem-solving searches',band:'low'},{text:'Mix of problem-solving and lifestyle',band:'mid'},{text:'High purchase intent — ready-to-buy signals',band:'high'}]},
+  {id:'S1',force:'s',text:'How many active sellers are you aware of in this category?',opts:[{text:'Very few — limited competition',band:'low'},{text:'Moderate number — healthy ecosystem',band:'mid'},{text:'Many — heavily saturated',band:'high'}]},
+  {id:'S2',force:'s',text:'Seller concentration in your category...',opts:[{text:'Distributed — many small players',band:'low'},{text:'Moderate — mix of sizes',band:'mid'},{text:'Concentrated — dominated by major brands',band:'high'}]},
+  {id:'S3',force:'s',text:'Ease of differentiation in your category...',opts:[{text:'High — many ways to stand out',band:'low'},{text:'Moderate — differentiation possible but competitive',band:'mid'},{text:'Low — commoditized, hard to differentiate',band:'high'}]},
+  {id:'A1',force:'a',text:'Estimated cost per click (or equivalent ad spend to reach buyers)...',opts:[{text:'Low — $0.50 or less',band:'low'},{text:'Moderate — $0.50–2.00',band:'mid'},{text:'High — $2.00+',band:'high'}]},
+  {id:'A2',force:'a',text:'Sponsored/paid listings density in your category...',opts:[{text:'Low — organic results dominate',band:'low'},{text:'Moderate — mix of paid and organic',band:'mid'},{text:'High — paid results dominate',band:'high'}]},
+  {id:'A3',force:'a',text:'Difficulty of achieving high organic rank without paid ads...',opts:[{text:'Low — organics rank easily',band:'low'},{text:'Moderate — requires consistent effort',band:'mid'},{text:'High — ads nearly required to compete',band:'high'}]},
+  {id:'M1',force:'m',text:'Price spread across your category (lowest to highest price)...',opts:[{text:'Wide — lots of price differentiation',band:'low'},{text:'Moderate — some price variety',band:'mid'},{text:'Narrow — prices compressed, hard to differentiate',band:'high'}]},
+  {id:'M2',force:'m',text:'Gross margins for successful sellers in your category...',opts:[{text:'High — 50%+ after COGS',band:'low'},{text:'Moderate — 35–50%',band:'mid'},{text:'Low — under 35%',band:'high'}]},
+  {id:'M3',force:'m',text:'Total fee burden (platform + payment + shipping) as % of selling price...',opts:[{text:'Low — under 20%',band:'low'},{text:'Moderate — 20–35%',band:'mid'},{text:'High — 35%+',band:'high'}]},
+];
+
+const QS_BY_FORCE={d:[],s:[],a:[],m:[]};
+QS.forEach(q=>QS_BY_FORCE[q.force].push(q));
+
+const DOMINANT_DATA={
+  d:{cardClass:'dominant-card-demand',eyecolor:'#0f6e56',title:'Demand-Driven Market',what:'<strong>What it means:</strong> Your category has clear buyer intent, but you\'re entering into a market where the structure is still being defined. Demand is the constraining factor, not supply or price.',action:'<strong>Move fast.</strong> Target neglected sub-niches within the category. Prioritize first-mover advantage and reviews over margin early. Understand that your biggest risk is that demand was in one niche and you\'re selling to another.'},
+  s:{cardClass:'dominant-card-supply',eyecolor:'#9b8ec4',title:'Supply-Constrained (or -Saturated)',what:'<strong>What it means:</strong> You\'re entering into a market with structural competition dynamics. Either supply is restricted (unusual), or it\'s saturated with sellers competing on overlapping attributes.',action:'<strong>Do not enter without clear differentiation.</strong> Mine 3-star reviews — look at what customers say is "good but not great." Build your product or brand specifically to address a gap they\'re pointing to. Expect to spend capital on customer acquisition and brand-building.'},
+  a:{cardClass:'dominant-card-ads',eyecolor:'#d48a3a',title:'Advertising-Driven (High Ad Spend)',what:'<strong>What it means:</strong> The market structure is such that visibility requires paid media. Organic reach is either limited or extremely expensive. You\'re competing in an auction for attention.',action:'<strong>Model at TACoS 20–35% from day one.</strong> If your unit economics don\'t support that, the market is closed to you. Plan for 6–12 months of customer acquisition spend before profitability. Consider whether your product margin can sustain this cost of entry.'},
+  m:{cardClass:'dominant-card-margin',eyecolor:'#3a9e78',title:'Margin-Constrained (Price Compression)',what:'<strong>What it means:</strong> Price competition and fees have compressed the margin corridor so tightly that profitable growth requires either extremely high volume or extreme cost discipline.',action:'<strong>Stress-test unit economics ruthlessly.</strong> If landed cost + fees + ads exceeds 70% of your price, find a premium variant of the product or choose a different category. Volume alone will not solve margin problems.'},
+};
+
+const OCEAN_COPY={
+  blue:{label:'Blue Ocean',body:'Low cross-pressure. Room to enter, differentiate, and price with margin. Your main risk is underestimating the time and capital required to build visibility from scratch in a category that hasn\'t yet been heavily contested. Move with intention — blue oceans don\'t stay blue.'},
+  amber:{label:'Transitional Market',body:'Mixed pressure signals. Entry is viable but requires a clear answer to the dominant force driving your score. The gap between a 3.0 and a 6.5 is significant — at 3.0 you have maneuver room and can recover from early mistakes; at 6.5 the margin for error is thin and capital requirements are higher. Understand which force is highest before committing.'},
+  red:{label:'Red Ocean',body:'High structural pressure, self-reinforcing. All four forces are active and amplify each other: dense supply raises ad costs, compressed margins force price competition, price competition attracts more sellers. Entry is possible but requires strong differentiation, 12+ months of capital runway, and a specific asymmetric advantage. Your Entry Strategy will address whether your specific profile can navigate this — and what conditions need to be true before committing capital.'},
+};
+
+function buildQuestions() {
+  const body=document.getElementById('aBody');
+  body.innerHTML='';
+  const forces=['d','s','a','m'];
+  const forceNames={d:'Demand Pressure',s:'Supply Pressure',a:'Advertising Pressure',m:'Margin Corridor'};
+  const forceTags={d:'.td',s:'.ts',a:'.ta',m:'.tm'};
+  forces.forEach(force=>{
+    const block=document.createElement('div');
+    block.className='dim-block';
+    const tag=forceTags[force];
+    const tagClass=tag.substring(1);
+    block.innerHTML=`<div class="dim-hdr"><span class="dim-tag ${tagClass}">${forceNames[force]}</span></div>`;
+    QS_BY_FORCE[force].forEach((q,qi)=>{
+      const qb=document.createElement('div');
+      qb.className='q-block';
+      qb.style.animationDelay=`${qi*0.04}s`;
+      qb.innerHTML=`<div class="q-lbl"><span class="q-num">${q.id}</span><span>${q.text}</span></div><div class="opts">${q.opts.map((o,i)=>`<button type="button" class="opt" onclick="pick('${q.id}',${i})" data-q="${q.id}" data-i="${i}"><div class="dot"></div><span class="opt-txt">${o.text}</span><span class="opt-score">${BAND[o.band]}</span></button>`).join('')}</div>`;
+      block.appendChild(qb);
+    });
+    body.appendChild(block);
+  });
+}
+
+function pick(qid,idx) {
+  const q=QS.find(x=>x.id===qid);
+  ans[qid]={idx,band:q.opts[idx].band,score:BAND[q.opts[idx].band]};
+  document.querySelectorAll(`[data-q="${qid}"]`).forEach((b,i)=>b.classList.toggle('sel',i===idx));
+  const n=Object.keys(ans).length;
+  document.getElementById('progTxt').textContent=`${n} / 12`;
+  document.getElementById('progFill').style.width=`${n/12*100}%`;
+  if(n===12)document.getElementById('cBar').classList.add('show');
+}
+
+function calcScores() {
+  const forces={d:[],s:[],a:[],m:[]};
+  QS.forEach(q=>{if(ans[q.id])forces[q.force].push(ans[q.id].score);});
+  const out={};
+  Object.entries(forces).forEach(([f,vs])=>{out[f]=vs.length?parseFloat((vs.reduce((a,b)=>a+b)/vs.length).toFixed(1)):0;});
+  const vals=Object.values(out);
+  out.index=parseFloat((vals.reduce((a,b)=>a+b)/vals.length).toFixed(1));
+  return out;
+}
+
+function dominant(scores) {
+  let top=null,topVal=-1;
+  ['d','s','a','m'].forEach(f=>{if(scores[f]>topVal){topVal=scores[f];top=f;}});
+  return top;
+}
+
+function oceanClass(index) {
+  if(index<=3.0)return 'blue';
+  if(index<=6.9)return 'amber';
+  return 'red';
+}
+
+async function submitAssessment(){
+  if(Object.keys(ans).length<12) {
+    alert('Please answer all 12 signals before submitting');
+    return;
+  }
+  
+  if(!clientEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientEmail) || !clientCategory) {
+    alert('Invalid email or category. Please start from the beginning.');
+    show('welcomeScreen');
+    return;
+  }
+  
+  document.getElementById('cBtn').disabled=true;
+  document.getElementById('cBtn').textContent='Calculating...';
+  document.getElementById('overlay').classList.add('show');
+
+  const scores=calcScores();
+  const dom=dominant(scores);
+
+  if(WEB_APP_URL&&WEB_APP_URL.indexOf('script.google.com')!==-1){
+    try {
+      const formData=new FormData();
+      formData.append('clientEmail',clientEmail);
+      formData.append('clientCategory',clientCategory);
+      formData.append('demand',scores.d);
+      formData.append('supply',scores.s);
+      formData.append('advertising',scores.a);
+      formData.append('margin',scores.m);
+      formData.append('index',scores.index);
+      formData.append('ocean',oceanClass(scores.index));
+      formData.append('dominantForce',dom);
+      formData.append('source','client-market-pressure');
+      
+      fetch(WEB_APP_URL,{method:'POST',mode:'no-cors',body:formData}).catch(err=>console.log('Submission recorded'));
+    } catch(err){}
+  }
+
+  setTimeout(()=>{document.getElementById('overlay').classList.remove('show');showResults(scores,dom);},1800);
+}
+
+function showResults(scores,dom) {
+  const ocean=oceanClass(scores.index);
+  const oc=OCEAN_COPY[ocean];
+
+  document.getElementById('categoryLine').textContent=
+    `Scanning: "${clientCategory}" — this score reflects what you observed in that category. The more accurate your observations, the more useful this result.`;
+
+  const card=document.getElementById('indexCard');
+  card.className=`index-card index-${ocean}`;
+  document.getElementById('indexCardLabel').textContent='Your Market Pressure';
+  document.getElementById('indexNumber').textContent=scores.index.toFixed(1);
+  document.getElementById('zoneLabel').textContent=ocean==='blue'?'1.0 – 3.0':ocean==='amber'?'3.1 – 6.9':'7.0 – 10.0';
+  document.getElementById('zoneName').textContent=oc.label;
+  document.getElementById('indexBody').textContent=oc.body;
+
+  const forceRows=document.getElementById('forceRows');
+  forceRows.innerHTML='';
+  const forcesOrder=['d','s','a','m'];
+  const maxForce=Math.max(...forcesOrder.map(f=>scores[f]));
+  forcesOrder.forEach(f=>{
+    const meta=FORCE_META[f];
+    const val=scores[f];
+    const isTop=val===maxForce&&val===scores[dom];
+    const pct=(val/10)*100;
+    const row=document.createElement('div');
+    row.className='force-row';
+    row.innerHTML=`
+      <div class="force-label" style="color:${meta.color}">${meta.name}</div>
+      <div class="force-bar-wrap">
+        <div class="force-bar-fill" data-pct="${pct}" style="width:0%;background:${meta.hex};"></div>
+      </div>
+      <div class="force-score-txt" style="color:${meta.color}">${val.toFixed(1)}</div>
+      ${isTop?`<div class="force-dominant-badge" style="background:${meta.hex}20;color:${meta.hex};">dominant</div>`:'<div style="width:60px"></div>'}
+    `;
+    forceRows.appendChild(row);
+  });
+
+  setTimeout(()=>{document.querySelectorAll('.force-bar-fill').forEach(el=>{el.style.transition='width 0.8s cubic-bezier(0.34,1.56,0.64,1)';el.style.width=el.dataset.pct+'%';});},100);
+
+  const dd=DOMINANT_DATA[dom];
+  document.getElementById('dominantSlot').innerHTML=`
+    <div class="dominant-card ${dd.cardClass}">
+      <div class="dominant-eyebrow" style="color:${dd.eyecolor}">Primary Risk Factor — Dominant Force</div>
+      <div class="dominant-title">${dd.title}</div>
+      <div class="dominant-what">${dd.what}</div>
+      <div class="dominant-action-lbl">High-Level Strategic Prescription</div>
+      <div class="dominant-action">${dd.action}</div>
+    </div>`;
+
+  show('resultsScreen');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// FIX: validateForm - PROPER IMPLEMENTATION
+function validateForm() {
+  const catEl=document.getElementById('categoryInput');
+  const emailEl=document.getElementById('emailInput');
+  const consentEl=document.getElementById('consentCheck');
+  const startBtn=document.getElementById('startBtn');
+  
+  const cat=(catEl ? catEl.value.trim() : '');
+  const email=(emailEl ? emailEl.value.trim() : '');
+  const consent=(consentEl ? consentEl.checked : false);
+  
+  const validEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  
+  if(startBtn) {
+    startBtn.disabled=!(cat.length>0 && email.length>0 && validEmail && consent);
+  }
+}
+
+function validateBooking(){
+  const c=document.getElementById('bookingConsent').checked;
+  ['ctaBtn','ctaBtn2'].forEach(id=>{
+    const btn=document.getElementById(id);
+    if(!btn)return;
+    btn.disabled=!c;
+    btn.style.opacity=c?'1':'0.35';
+  });
+}
+
+function startAssessment(){
+  const cat=document.getElementById('categoryInput').value.trim();
+  const email=document.getElementById('emailInput').value.trim();
+  const c=document.getElementById('consentCheck').checked;
+  if(cat.length===0 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !c)return;
+  clientEmail=email;
+  clientCategory=cat;
+  buildQuestions();
+  show('assessScreen');
+  window.scrollTo({top:0,behavior:'instant'});
+}
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+document.addEventListener('DOMContentLoaded',()=>{validateBooking();});
+</script>
+</body>
+</html>
