@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Marketplace Fit Calculator | eSellerFit</title>
+  <link rel="stylesheet" href="./assets/css/shared-ui.css">
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XYYCWXC1RV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', 'G-XYYCWXC1RV');
+  </script>
+</head>
+<body>
+  <main class="esf-page">
+    <div class="esf-container">
+      <!-- Welcome Screen -->
+      <section id="welcome-screen" class="esf-card">
+        <h1 class="esf-title">Marketplace Fit Calculator</h1>
+        <p class="esf-subtitle">
+          Find your best platform — Amazon, Shopify, or Etsy. Understand which platform aligns with your business across three critical layers: customer fit, operational capability, and financial viability.
+        </p>
+
+        <!-- Layer Preview -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 32px; padding: 20px; background: #f5f2eb; border-radius: 8px;">
+          <div style="text-align: center;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #3a72b0; margin-bottom: 8px; font-weight: 600;">Layer 1</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 16px; color: #1a1a1a; font-weight: 600;">Customer Fit</div>
+            <div style="font-size: 12px; color: #7a7065; margin-top: 6px;">Does your buyer exist &amp; buy here?</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #b8620a; margin-bottom: 8px; font-weight: 600;">Layer 2</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 16px; color: #1a1a1a; font-weight: 600;">Operational Fit</div>
+            <div style="font-size: 12px; color: #7a7065; margin-top: 6px;">Can you operate here?</div>
+          </div>
+          <div style="text-align: center;">
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #2a6a3a; margin-bottom: 8px; font-weight: 600;">Layer 3</div>
+            <div style="font-family: 'Playfair Display', serif; font-size: 16px; color: #1a1a1a; font-weight: 600;">Financial Fit</div>
+            <div style="font-size: 12px; color: #7a7065; margin-top: 6px;">Can you afford it?</div>
+          </div>
+        </div>
+
+        <div class="esf-form-row">
+          <label class="esf-label" for="emailInput">Your Email</label>
+          <input
+            id="emailInput"
+            class="esf-input"
+            type="email"
+            placeholder="you@company.com"
+          >
+        </div>
+
+        <div class="esf-form-row">
+          <label class="esf-label" for="categoryInput">Product Category</label>
+          <input
+            id="categoryInput"
+            class="esf-input"
+            type="text"
+            placeholder="e.g. fitness equipment, skincare, home organizers"
+          >
+        </div>
+
+        <!-- UNIVERSAL CONSENT CHECKBOX - Same on ALL calculators -->
+        <label class="esf-checkbox-consent" style="display: flex; align-items: flex-start; gap: 12px; margin-bottom: 24px; padding: 0;">
+          <input 
+            type="checkbox" 
+            id="consentCheckAll" 
+            style="margin-top: 4px; cursor: pointer; width: 18px; height: 18px; flex-shrink: 0;"
+          >
+          <span style="font-size: 13px; line-height: 1.6; color: #7a7065; cursor: pointer;">
+            I agree to the 
+            <a href="/legal/terms.html" target="_blank" style="color: #0f6e56; text-decoration: none; font-weight: 600;">Terms of Service</a>, 
+            <a href="/legal/privacy.html" target="_blank" style="color: #0f6e56; text-decoration: none; font-weight: 600;">Privacy Policy</a>, 
+            and 
+            <a href="/legal/disclaimer.html" target="_blank" style="color: #0f6e56; text-decoration: none; font-weight: 600;">Disclaimer</a>, 
+            and understand that this tool provides directional advisory insight only.
+          </span>
+        </label>
+
+        <div class="esf-actions">
+          <button id="startBtn" class="esf-btn esf-btn-primary" disabled>Start Assessment</button>
+        </div>
+
+        <!-- UNIVERSAL FOOTER - 5 LEGAL DOCUMENTS -->
+        <footer style="text-align: center; padding: 24px 0; border-top: 1px solid #d8d0c4; margin-top: 40px;">
+          <div style="font-size: 11px; color: #7a7065; line-height: 1.8;">
+            <a href="/legal/terms.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Terms of Service
+            </a>
+            <span style="color: #d8d0c4;">|</span>
+            <a href="/legal/privacy.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Privacy Policy
+            </a>
+            <span style="color: #d8d0c4;">|</span>
+            <a href="/legal/disclaimer.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Disclaimer
+            </a>
+            <span style="color: #d8d0c4;">|</span>
+            <a href="/legal/client-agreement.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Client Agreement
+            </a>
+            <span style="color: #d8d0c4;">|</span>
+            <a href="/legal/refund-policy.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Refund Policy
+            </a>
+          </div>
+        </footer>
+      </section>
+
+      <!-- Assessment Screen -->
+      <section id="assessment-screen" class="esf-hidden">
+        <div style="margin-bottom: 32px;">
+          <div class="esf-progress"><div id="progressBar" class="esf-progress-bar"></div></div>
+          <div id="progressText" class="esf-progress-meta"></div>
+        </div>
+
+        <div id="questions-container"></div>
+
+        <div class="esf-actions" style="margin-top: 40px;">
+          <button id="submitBtn" class="esf-btn esf-btn-primary">Calculate My Fit</button>
+        </div>
+
+        <div id="assessmentError" class="esf-error esf-hidden">
+          Please answer all questions before calculating your fit.
+        </div>
+      </section>
+
+      <!-- Results Screen -->
+      <section id="results-screen" class="esf-hidden">
+        <div id="results-container"></div>
+
+        <!-- UNIVERSAL FOOTER - 5 LEGAL DOCUMENTS (Results Screen) -->
+        <footer style="text-align: center; padding: 24px 0; border-top: 1px solid #d8d0c4; margin-top: 40px;">
+          <div style="font-size: 11px; color: #7a7065; line-height: 1.8;">
+            <a href="/legal/terms.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Terms of Service
+            </a>
+            <span style="color: #d8d0c4;">|</span>
+            <a href="/legal/privacy.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Privacy Policy
+            </a>
+            <span style="color: #d8d0c4;">|</span>
+            <a href="/legal/disclaimer.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Disclaimer
+            </a>
+            <span style="color: #d8d0c4;">|</span>
+            <a href="/legal/client-agreement.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Client Agreement
+            </a>
+            <span style="color: #d8d0c4;">|</span>
+            <a href="/legal/refund-policy.html" target="_blank" style="color: #7a7065; text-decoration: none; margin: 0 12px; display: inline-block;">
+              Refund Policy
+            </a>
+          </div>
+        </footer>
+      </section>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="./assets/js/config.js"></script>
+  <script src="./assets/js/calculator-shell.js"></script>
+  <script src="./assets/js/marketplace-fit-data.js"></script>
+  <script src="./assets/js/marketplace-fit-engine.js"></script>
+  <script src="./assets/js/marketplace-fit-render.js"></script>
+
+  <!-- Initialization -->
+  <script>
+    // Wait for all scripts to load before initializing
+    document.addEventListener('DOMContentLoaded', () => {
+      const screenIds = ['welcome-screen', 'assessment-screen', 'results-screen'];
+      let clientEmail = '';
+      let clientCategory = '';
+
+      // Setup welcome screen - UPDATED: binding now includes consentAllId for universal checkbox
+      ESF_SHELL.bindStartGate({
+        emailId: 'emailInput',
+        consentId: 'consentCheck',              // Keep old one for backward compat
+        consentAllId: 'consentCheckAll',        // NEW: Universal checkbox
+        startBtnId: 'startBtn',
+        extraRequiredIds: ['categoryInput']
+      });
+
+    // Start assessment
+    document.getElementById('startBtn').addEventListener('click', () => {
+      clientEmail = document.getElementById('emailInput').value.trim();
+      clientCategory = document.getElementById('categoryInput').value.trim();
+
+      ESF_SHELL.showOnly(screenIds, 'assessment-screen');
+      ESF_SHELL.renderQuestions(
+        'questions-container',
+        MARKETPLACE_FIT_DATA.questions,
+        MARKETPLACE_FIT_DATA.answerPrefix
+      );
+      ESF_SHELL.bindProgress(
+        MARKETPLACE_FIT_DATA.answerPrefix,
+        MARKETPLACE_FIT_DATA.totalQuestions,
+        'progressBar',
+        'progressText'
+      );
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Track event
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'assessment_started', {
+          calculator: MARKETPLACE_FIT_DATA.id,
+          category: clientCategory
+        });
+      }
+    });
+
+    // Submit assessment
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      const errorEl = document.getElementById('assessmentError');
+
+      // Validate all answered
+      if (
+        !ESF_SHELL.allQuestionsAnswered(
+          MARKETPLACE_FIT_DATA.answerPrefix,
+          MARKETPLACE_FIT_DATA.totalQuestions
+        )
+      ) {
+        errorEl.classList.remove('esf-hidden');
+        return;
+      }
+      errorEl.classList.add('esf-hidden');
+
+      // Collect answers
+      const answers = ESF_SHELL.collectAnswers(
+        MARKETPLACE_FIT_DATA.answerPrefix,
+        MARKETPLACE_FIT_DATA.totalQuestions
+      );
+
+      // Calculate scores
+      const result = MARKETPLACE_FIT_ENGINE.calculate(answers, MARKETPLACE_FIT_DATA);
+
+      // Submit lead data
+      await ESF_SHELL.submitLead({
+        calculator: MARKETPLACE_FIT_DATA.id,
+        category: clientCategory,
+        email: clientEmail,
+        answers,
+        result
+      });
+
+      // Show results
+      ESF_SHELL.showOnly(screenIds, 'results-screen');
+      MARKETPLACE_FIT_RENDER.renderResults('results-container', result, clientCategory);
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Track event
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'assessment_completed', {
+          calculator: MARKETPLACE_FIT_DATA.id,
+          category: clientCategory,
+          amazon_fit: result.platformScores.amazon,
+          shopify_fit: result.platformScores.shopify,
+          etsy_fit: result.platformScores.etsy,
+          top_platform: result.topPlatform
+        });
+      }
+    });
+    }); // ← Close DOMContentLoaded
+  </script>
+</body>
+</html>
