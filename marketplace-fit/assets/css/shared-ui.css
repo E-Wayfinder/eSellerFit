@@ -1,1 +1,351 @@
+/* eSellerFit Shared UI Styles */
 
+:root {
+  --bg: #f5f2eb;
+  --ink: #1a1a1a;
+  --muted: #7a7065;
+  --border: #d8d0c4;
+  --card: #fff;
+  --demand: #0f6e56;
+  --demand-l: #d0ecdf;
+  --supply: #9b8ec4;
+  --supply-l: #ede8f7;
+  --ads: #d48a3a;
+  --ads-l: #faecd4;
+  --margin: #3a9e78;
+  --margin-l: #d4f0e6;
+  --dark: #1a1a22;
+  --dark2: #222230;
+  --t1: #e8e8e8;
+  --t2: #b8b8c8;
+  --t3: #888898;
+  --t4: #585868;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Syne', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* Layout */
+.esf-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.esf-container {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Typography */
+.esf-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.esf-subtitle {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.esf-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Forms */
+.esf-form-row {
+  margin-bottom: 24px;
+}
+
+.esf-input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  color: var(--ink);
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.esf-input:focus {
+  border-color: var(--demand);
+  box-shadow: 0 0 0 3px rgba(15, 110, 86, 0.1);
+}
+
+.esf-input::placeholder {
+  color: #bbb;
+}
+
+/* Checkboxes */
+.esf-checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.esf-checkbox-row input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: var(--demand);
+  flex-shrink: 0;
+}
+
+/* Buttons */
+.esf-btn {
+  padding: 14px 28px;
+  border-radius: 6px;
+  border: none;
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.esf-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.esf-btn-primary {
+  background: var(--demand);
+  color: white;
+  width: 100%;
+}
+
+.esf-btn-primary:hover:not(:disabled) {
+  background: #0f8a6a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 110, 86, 0.2);
+}
+
+/* Cards */
+.esf-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 36px;
+  margin-bottom: 24px;
+}
+
+.esf-question {
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.esf-question-text {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.esf-question-nudge {
+  font-size: 12px;
+  color: var(--demand);
+  font-style: italic;
+  background: var(--demand-l);
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.esf-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.esf-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  background: var(--card);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.4;
+  transition: all 0.12s;
+}
+
+.esf-option:hover {
+  border-color: var(--demand);
+  background: var(--demand-l);
+}
+
+.esf-option input[type='radio'] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--demand);
+}
+
+/* Progress */
+.esf-progress {
+  width: 100%;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.esf-progress-bar {
+  height: 100%;
+  background: var(--demand);
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+.esf-progress-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Actions */
+.esf-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* Error */
+.esf-error {
+  background: #f5ddd8;
+  border: 1px solid #c43a2a;
+  border-radius: 6px;
+  padding: 12px 16px;
+  color: #c43a2a;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.esf-hidden {
+  display: none !important;
+}
+
+/* Results */
+.esf-result-card {
+  background: linear-gradient(140deg, #111828, #141c28);
+  border: 1.5px solid rgba(15, 110, 86, 0.4);
+  border-radius: 12px;
+  padding: 48px;
+  margin-bottom: 24px;
+}
+
+.esf-result-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 64px;
+  font-weight: 600;
+  color: #3a9e78;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.esf-result-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  color: #a0dfc8;
+  margin-bottom: 20px;
+}
+
+.esf-result-body {
+  font-size: 14px;
+  color: #6ab0a0;
+  line-height: 1.8;
+}
+
+/* Legal Links */
+.esf-legal-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+.esf-legal-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.esf-legal-links a:hover {
+  color: var(--demand);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .esf-page {
+    padding: 20px 16px;
+  }
+
+  .esf-card {
+    padding: 24px;
+  }
+
+  .esf-title {
+    font-size: 24px;
+  }
+
+  .esf-result-number {
+    font-size: 48px;
+  }
+
+  .esf-result-label {
+    font-size: 18px;
+  }
+}
