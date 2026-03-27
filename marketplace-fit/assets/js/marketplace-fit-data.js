@@ -48,12 +48,12 @@ window.MARKETPLACE_FIT_DATA = {
       text: 'How niche is your product compared to commodity alternatives?',
       layer: 'cf',
       options: [
-        { label: 'Unique/differentiated — solves specific problem others don't', value: '2' },
+        { label: "Unique/differentiated — solves specific problem others don't", value: '2' },
         { label: 'Somewhat differentiated — better but has competitors', value: '5' },
         { label: 'Commodity — many interchangeable alternatives exist', value: '8.5' }
       ]
     },
-    
+
     // LAYER 2: OPERATIONAL FIT (Q5-Q8)
     {
       id: 'Q5',
@@ -139,13 +139,13 @@ window.MARKETPLACE_FIT_DATA = {
     }
   ],
 
-  // PLATFORMS: Amazon, Shopify, Etsy (with colors, icons, weights, flags)
+  // PLATFORMS: Amazon, Shopify, Etsy
   platforms: {
     amazon: {
       name: 'Amazon',
       icon: '📦',
       color: '#FF9900',
-      weights: [0.30, 0.40, 0.30],  // [CF, OF, FF]
+      weights: [0.30, 0.40, 0.30],
       flags: [
         { label: 'High volume', hex: '#FF9900' },
         { label: 'Commodity-friendly', hex: '#FF9900' },
@@ -156,7 +156,7 @@ window.MARKETPLACE_FIT_DATA = {
       name: 'Shopify',
       icon: '🛍️',
       color: '#96BE3D',
-      weights: [0.45, 0.20, 0.35],  // [CF, OF, FF]
+      weights: [0.45, 0.20, 0.35],
       flags: [
         { label: 'Brand building', hex: '#96BE3D' },
         { label: 'Full control', hex: '#96BE3D' },
@@ -167,7 +167,7 @@ window.MARKETPLACE_FIT_DATA = {
       name: 'Etsy',
       icon: '🎨',
       color: '#F1641E',
-      weights: [0.50, 0.20, 0.30],  // [CF, OF, FF]
+      weights: [0.50, 0.20, 0.30],
       flags: [
         { label: 'Niche buyers', hex: '#F1641E' },
         { label: 'Handmade friendly', hex: '#F1641E' },
@@ -176,7 +176,7 @@ window.MARKETPLACE_FIT_DATA = {
     }
   },
 
-  // LAYER METADATA: colors and labels
+  // LAYER METADATA
   layerMeta: {
     cf: { name: 'Customer Fit', hex: '#3a72b0', label: 'Does your buyer exist & buy here?' },
     of: { name: 'Operational Fit', hex: '#b8620a', label: 'Can you operationally handle this platform?' },
